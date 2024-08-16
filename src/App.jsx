@@ -30,13 +30,47 @@ const router = createBrowserRouter([
         element: <Navigate replace to={"/dashboard"} />,
       },
       {
-        path: "/dashboard",
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "orders",
+        element: <Dashboard />,
+      },
+      {
+        path: "orders/:id",
+        element: <Dashboard />,
+      },
+      {
+        path: "products",
+        element: <Dashboard />,
+        children: [
+          {
+            path: "new",
+            element: <Dashboard />,
+          },
+          {
+            path: "category",
+            element: <Dashboard />,
+          },
+          {
+            path: "size",
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "customers",
+        element: <Dashboard />,
+      },
+      {
+        path: "discounts",
         element: <Dashboard />,
       },
     ],
   },
   {
-    path: "/login",
+    path: "login",
     element: <LoginPage />,
     action: loginAction,
     errorElement: <Error />,

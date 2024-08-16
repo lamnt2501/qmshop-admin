@@ -102,3 +102,9 @@
     transform: translateX(-350px);
   }
 }
+
+a.active {
+  background-color: #846cf8;
+  color: white;
+  border: none;
+}
