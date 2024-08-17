@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 const AuthContext = createContext();
 
 const initialState = {
-  token: "",
+  token: Cookies.get("accessToken") || "",
 };
 
 function reducer(state, action) {
@@ -34,11 +34,6 @@ function logout() {
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    const token = Cookies.get("accessToken");
-    if (token) dispatch(setToken(token));
-  }, []);
 
   return (
     <AuthContext.Provider value={{ ...state, dispatch, setToken, logout }}>

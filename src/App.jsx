@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 // import store from "./states/store";
 import AppLayout from "./ui/AppLayout";
@@ -35,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: "orders",
-        element: <Dashboard />,
+        element: <p>hi</p>,
       },
       {
         path: "orders/:id",
@@ -80,11 +79,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     // <Provider store={store}>
-    <>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
     // </Provider>
   );
 }

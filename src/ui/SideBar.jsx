@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 function SideBar() {
   const { pathname } = useLocation();
@@ -30,13 +30,13 @@ function SideBar() {
           title="Product"
         >
           <ul className="ml-2 mt-2 space-y-1 transition-all">
-            <div className="border-l-2 border-purple-500 px-3 py-1">
+            <div className="border-l-2 border-purple-500 px-2">
               <NavItem to="/products/new" size="sm" title="New Product" />
             </div>
-            <div className="border-l-2 border-purple-500 px-3 py-1">
+            <div className="border-l-2 border-purple-500 px-2">
               <NavItem to="/products/category" size="sm" title="Category" />
             </div>
-            <div className="border-l-2 border-purple-500 px-3 py-1">
+            <div className="border-l-2 border-purple-500 px-2">
               <NavItem to="/products/size" size="sm" title="Size" />
             </div>
           </ul>
@@ -58,41 +58,45 @@ function SideBar() {
   );
 }
 
-function NavItem({ children, to, icon, title, size }) {
-  const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
-  useEffect(() => {
-    if (pathname.split("/")[1] !== to.split("/")[1]) {
-      setOpen(false);
-      console.log(pathname.split("/")[1], to.split("/")[1]);
-    }
-  }, [pathname, to]);
-  return (
-    <li
-      onClick={() => {
-        setOpen((open) => !open);
-      }}
-    >
-      <NavLink
-        to={to}
-        className={`flex w-full justify-between rounded-md px-3 py-2 text-[${size || "base"}] text-stone-700 transition-all`}
-      >
-        <p className="flex items-center space-x-2">
-          <span className="">{icon}</span>
-          <span className="hidden sm:block">{title}</span>
-        </p>
-        {children && (
-          <span className="float-right">
-            {!open ? (
-              <i className="fa-solid fa-chevron-right"></i>
-            ) : (
-              <i className="fa-solid fa-chevron-down"></i>
-            )}
-          </span>
-        )}
-      </NavLink>
-      {open && children}
-    </li>
-  );
-}
+const NavItem = memo(
+  function NavItem({ children, to, icon, title, size }) {
+    const [open, setOpen] = useState(false);
+    const { pathname } = useLocation();
+    useEffect(() => {
+      if (
+        to.startsWith("/" + title.toLowerCase()) !==
+        pathname.startsWith("/" + title.toLowerCase())
+      ) {
+        setOpen(false);
+      } else setOpen(true);
+    }, [to, pathname]);
+
+    return (
+      <li>
+        <NavLink
+          to={to}
+          className={`hover:ring-main flex w-full justify-between rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1`}
+        >
+          <p className={`flex items-center space-x-2 text-${size || "base"}`}>
+            <span className="">{icon}</span>
+            <span className="hidden sm:block">{title}</span>
+          </p>
+          {children && (
+            <span className="float-right">
+              {!open ? (
+                <i className="fa-solid fa-chevron-right"></i>
+              ) : (
+                <i className="fa-solid fa-chevron-down"></i>
+              )}
+            </span>
+          )}
+        </NavLink>
+        {open && children}
+      </li>
+    );
+  },
+  (curProps, newProps) => {
+    return true;
+  },
+);
 export default SideBar;
