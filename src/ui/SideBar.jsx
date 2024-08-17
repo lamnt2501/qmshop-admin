@@ -1,14 +1,19 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useAuthContext } from "../contexts/authContext";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 function SideBar() {
-  const { pathname } = useLocation();
-
   return (
-    <div className="fixed bottom-0 left-0 top-0 grid-rows-[47px_1fr] border-r border-stone-200 px-4 py-2 sm:w-[200px]">
-      <div className="hidden sm:block">
-        <img src="/logo.png" alt="logo image" />
+    <div className="fixed bottom-0 left-0 top-0 z-50 grid-rows-[47px_1fr] border-r border-stone-200 bg-white px-4 py-2 sm:w-[200px]">
+      <div>
+        <Link>
+          <img
+            className="hidden sm:block"
+            src="/logo.png"
+            alt="logo image"
+            to="/dashboard"
+          />
+          <div className="font-semibold">QM</div>
+        </Link>
       </div>
 
       <ul className="mt-4 space-y-3">
@@ -75,7 +80,7 @@ const NavItem = memo(
       <li>
         <NavLink
           to={to}
-          className={`hover:ring-main flex w-full justify-between rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1`}
+          className={`flex w-full justify-between rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1 hover:ring-main`}
         >
           <p className={`flex items-center space-x-2 text-${size || "base"}`}>
             <span className="">{icon}</span>

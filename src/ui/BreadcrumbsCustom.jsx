@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@mui/material";
-import { Link, NavLink, useHref } from "react-router-dom";
+import { Link, useHref } from "react-router-dom";
 import { upperCaseFirstLetter } from "../utils/utils.js";
 function BreadcrumbsCustom() {
   const href = useHref();
@@ -14,15 +14,15 @@ function BreadcrumbsCustom() {
   return (
     <Breadcrumbs aria-label="breadcrumbs" className="max-w-[fit-content]">
       {links.map((l) => (
-        <NavLink
-          className="hover:text-main bc-link"
-          href={l}
+        <Link
+          className="hover:text-main"
+          to={l}
           color="rgb(0,0,0,0.9)"
           underline="none"
           key={l}
         >
           {upperCaseFirstLetter(l.slice(l.lastIndexOf("/") + 1))}
-        </NavLink>
+        </Link>
       ))}
     </Breadcrumbs>
   );

@@ -108,8 +108,3 @@ a.active {
   color: white;
   border: none;
 }
-
-a.active.bc-link {
-  color: #846cf8;
-  background-color: transparent;
-}

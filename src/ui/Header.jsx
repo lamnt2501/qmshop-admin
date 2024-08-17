@@ -9,7 +9,7 @@ function Header() {
   const { dispatch, logout } = useAuthContext();
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-10 ml-[200px] flex items-center justify-between border-b border-stone-200 bg-white px-4 py-2">
+    <div className="fixed left-0 right-0 top-0 z-10 ml-[84px] flex items-center justify-between border-b border-stone-200 bg-white px-4 py-2 sm:ml-[200px]">
       <BreadcrumbsCustom />
       <div className="relative" onClick={() => setOpen((open) => !open)}>
         <Avatar
