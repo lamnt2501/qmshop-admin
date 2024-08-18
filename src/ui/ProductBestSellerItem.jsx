@@ -11,7 +11,7 @@ function ProductBestSellerItem({ divider, item }) {
   return (
     <>
       <Link to="/products">
-        <ListItem className="flex rounded-md">
+        <ListItem className="flex rounded-md hover:bg-slate-50">
           <ListItemAvatar>
             <Avatar
               variant="rounded"

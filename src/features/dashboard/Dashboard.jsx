@@ -1,6 +1,7 @@
 import { buildChartData } from "../../configs/charjsConfig";
 import ProductBestSellerList from "../../ui/ProductBestSellerList";
 import BarChart from "./BarChart";
+import CustomerRank from "./CustomerRank";
 import PieChart from "./PieChart";
 import StatisticCard from "./StatisticCard";
 
@@ -63,7 +64,7 @@ function Dashboard() {
           icon={<i className="fa-solid fa-exclamation"></i>}
         />
       </div>
-      <div className="gap-4 lg:grid lg:grid-cols-[70%_30%]">
+      <div className="space-x-4 lg:grid lg:grid-cols-[70%_30%]">
         <div className="px rounded-md bg-white p-3">
           <BarChart
             data={data}
@@ -89,8 +90,9 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-[40%_60%]">
+      <div className="space-y-4 lg:grid lg:grid-cols-[40%_60%] lg:space-x-4 lg:space-y-0">
         <ProductBestSellerList />
+        <CustomerRank />
       </div>
     </div>
   );
