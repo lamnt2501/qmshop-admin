@@ -2,11 +2,13 @@ import { buildChartData } from "../../configs/charjsConfig";
 import BarChart from "./BarChart";
 import PieChart from "./PieChart";
 import StatisticCard from "./StatisticCard";
+
 const data = buildChartData(
   [0, 0, 0, 0, 0, 0, 0].map(() => Math.random() * 2000000),
   ["January", "Febuary", "March", "April", "May", "June", "July"],
   "Revenue",
 );
+
 function Dashboard() {
   return (
     <div className="space-y-4">
@@ -80,8 +82,10 @@ function Dashboard() {
             }}
           />
         </div>
-        <div className="rounded-md bg-white">
-          <PieChart data={data} />
+        <div className="mt-4 flex items-center justify-center rounded-md bg-white lg:mt-0">
+          <div className="flex items-center rounded-md p-4">
+            <PieChart data={data} />
+          </div>
         </div>
       </div>
     </div>
