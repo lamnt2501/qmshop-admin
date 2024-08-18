@@ -2,14 +2,14 @@ import { Avatar, Menu, MenuItem } from "@mui/material";
 import BreadcrumbsCustom from "./BreadcrumbsCustom.jsx";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext.jsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Header() {
   const [open, setOpen] = useState(false);
   const { dispatch, logout } = useAuthContext();
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-10 ml-[84px] flex items-center justify-between border-b border-stone-200 bg-white px-4 py-2 sm:ml-[200px]">
+    <div className="fixed left-0 right-0 top-0 z-10 ml-[84px] flex items-center justify-between border-b border-stone-200 bg-white px-4 py-2 shadow-sm sm:ml-[200px]">
       <BreadcrumbsCustom />
       <div className="relative" onClick={() => setOpen((open) => !open)}>
         <Avatar

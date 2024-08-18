@@ -1,4 +1,5 @@
 import { buildChartData } from "../../configs/charjsConfig";
+import ProductBestSellerList from "../../ui/ProductBestSellerList";
 import BarChart from "./BarChart";
 import PieChart from "./PieChart";
 import StatisticCard from "./StatisticCard";
@@ -87,6 +88,9 @@ function Dashboard() {
             <PieChart data={data} />
           </div>
         </div>
+      </div>
+      <div className="grid grid-cols-[40%_60%]">
+        <ProductBestSellerList />
       </div>
     </div>
   );

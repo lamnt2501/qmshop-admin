@@ -12,7 +12,9 @@ function SideBar() {
             alt="logo image"
             to="/dashboard"
           />
-          <div className="font-semibold">QM</div>
+          <p className="text-center font-mono text-[30px] font-semibold sm:hidden">
+            QM
+          </p>
         </Link>
       </div>
 
@@ -80,7 +82,8 @@ const NavItem = memo(
       <li>
         <NavLink
           to={to}
-          className={`flex w-full justify-between rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1 hover:ring-main`}
+          onClick={() => setOpen(!open)}
+          className={`flex w-full justify-center rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1 hover:ring-main sm:justify-between`}
         >
           <p className={`flex items-center space-x-2 text-${size || "base"}`}>
             <span className="">{icon}</span>

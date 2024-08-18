@@ -1,3 +1,3 @@
 import upperCaseFirstLetter from "./upperCaseFirstLetter";
-
-export { upperCaseFirstLetter };
+import formatDate from "./formatDate";
+export { upperCaseFirstLetter, formatDate };
