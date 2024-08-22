@@ -1,11 +1,11 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:80/api/v1/auth";
+import { VITE_AUTH_API_URL } from "../../configs/envConfig";
 
 export async function login(email, password) {
   const res = { token: "", error: "" };
 
   await axios
-    .post(`${BASE_URL}/login`, {
+    .post(`${VITE_AUTH_API_URL}`, {
       email,
       password,
     })

@@ -29,6 +29,7 @@ function setToken(token) {
 }
 
 function logout() {
+  Cookies.remove("accessToken");
   return { type: "auth/logout" };
 }
 

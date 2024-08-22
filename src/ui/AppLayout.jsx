@@ -16,8 +16,8 @@ function AppLayout() {
           <div className="mt-[46.9px] overflow-y-auto overflow-x-hidden">
             <Outlet />
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     </div>
   );

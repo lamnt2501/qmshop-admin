@@ -1,10 +1,8 @@
 import { Divider, List } from "@mui/material";
-
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { useState } from "react";
-import formatDate from "../utils/formatDate";
+import formatDate from "../../utils/formatDate";
 import ProductBestSellerItem from "./ProductBestSellerItem";
 
 function ProductBestSellerList() {

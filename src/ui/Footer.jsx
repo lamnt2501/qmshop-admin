@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <div className="flex justify-between bg-white p-4 text-slate-400">
+    <div className="mt-4 flex justify-between rounded-md bg-white p-4 text-slate-400">
       <p className="">
         <span className="uppercase">copyright &copy;</span> 2024 QMShop All
         rights Reserved

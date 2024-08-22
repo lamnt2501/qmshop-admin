@@ -1,14 +1,19 @@
 import { buildChartData } from "../../configs/charjsConfig";
-import ProductBestSellerList from "../../ui/ProductBestSellerList";
+import ProductBestSellerList from "./ProductBestSellerList";
 import BarChart from "./BarChart";
 import CustomerRank from "./CustomerRank";
-import PieChart from "./PieChart";
+import DoughnutChart from "./DoughnutChart";
 import StatisticCard from "./StatisticCard";
 
 const data = buildChartData(
   [0, 0, 0, 0, 0, 0, 0].map(() => Math.random() * 2000000),
   ["January", "Febuary", "March", "April", "May", "June", "July"],
   "Revenue",
+);
+
+const dognutData = buildChartData(
+  [1, 2, 3, 4].map((i) => i * 10),
+  ["COD", "VNPay", "Momo", "ZaloPay"],
 );
 
 function Dashboard() {
@@ -78,15 +83,43 @@ function Dashboard() {
                 legend: {
                   display: false,
                 },
-
                 responsive: true,
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return `${Intl.NumberFormat("vn").format(context.parsed.y)} VND`;
+                    },
+                  },
+                },
               },
             }}
           />
         </div>
         <div className="mt-4 flex items-center justify-center rounded-md bg-white lg:mt-0">
           <div className="flex items-center rounded-md p-4">
-            <PieChart data={data} />
+            <DoughnutChart
+              data={dognutData}
+              options={{
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Payment gateway usage rate",
+                  },
+                  legend: {
+                    display: true,
+                    position: "bottom",
+                  },
+                  responsive: true,
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        return `${context.parsed}%`;
+                      },
+                    },
+                  },
+                },
+              }}
+            />
           </div>
         </div>
       </div>

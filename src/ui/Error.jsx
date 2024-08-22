@@ -5,7 +5,7 @@ function Error() {
   const error = useRouteError();
   return (
     <div>
-      <h1>{"Có gì đó không ổn"}</h1>
+      <h1>{error.data || error.message}</h1>
       <button onClick={() => navigate(-1)}>Trở lại</button>
     </div>
   );

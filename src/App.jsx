@@ -1,6 +1,7 @@
 import { Provider } from "react-redux";
 import {
   createBrowserRouter,
+  createRoutesFromElements,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
@@ -13,7 +14,7 @@ import LoginPage, {
 import Error from "./ui/Error";
 import { AuthProvider } from "./contexts/authContext";
 import ProtectedRoute from "./ui/ProtectedRoute";
-
+import OrderDashboard from "./features/order/OrderDashboard";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: "orders",
-        element: <p>hi</p>,
+        element: <OrderDashboard />,
       },
       {
         path: "orders/:id",
