@@ -2,7 +2,7 @@ import axios from "axios";
 import { VITE_AUTH_API_URL } from "../../configs/envConfig";
 
 export async function login(email, password) {
-  const res = { token: "", error: "" };
+  const res = {};
 
   await axios
     .post(`${VITE_AUTH_API_URL}`, {

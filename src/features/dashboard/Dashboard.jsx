@@ -4,6 +4,12 @@ import BarChart from "./BarChart";
 import CustomerRank from "./CustomerRank";
 import DoughnutChart from "./DoughnutChart";
 import StatisticCard from "./StatisticCard";
+import getDashBoardData from "../../apis/dashboard/dashboardApi";
+import { useLoaderData } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { dataLoaded } from "../../states/slices/dashboardSlice";
+import { formatNumber } from "../../utils/utils";
 
 const data = buildChartData(
   [0, 0, 0, 0, 0, 0, 0].map(() => Math.random() * 2000000),
@@ -11,12 +17,27 @@ const data = buildChartData(
   "Revenue",
 );
 
-const dognutData = buildChartData(
-  [1, 2, 3, 4].map((i) => i * 10),
-  ["COD", "VNPay", "Momo", "ZaloPay"],
-);
+function dognutData(paymentStatistic = {}) {
+  const keys = Object.keys(paymentStatistic);
+  const total = Object.values(paymentStatistic)?.reduce(
+    (pre, cur) => pre + cur,
+    0,
+  );
+  return buildChartData(
+    keys.map((k) => Math.round((paymentStatistic[k] * 100) / total)),
+    keys,
+  );
+}
 
 function Dashboard() {
+  const dispatch = useDispatch();
+  const loaderData = useLoaderData();
+  const { orderSummary, paymentStatistic } = useSelector((s) => s.dashboard);
+
+  useEffect(() => {
+    if (!loaderData.error) dispatch(dataLoaded(loaderData));
+  }, [loaderData]);
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4 rounded-md bg-white p-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -28,7 +49,7 @@ function Dashboard() {
             darkEffectColor: "rgb(169, 151, 250)",
           }}
           title={"Total Orders"}
-          data={"4123"}
+          data={orderSummary?.totalOrder}
           status="up"
           icon={<i className="fa-solid fa-cart-shopping"></i>}
         />
@@ -41,7 +62,7 @@ function Dashboard() {
           }}
           icon={<i className="fa-solid fa-receipt"></i>}
           title={"Today Orders"}
-          data={"14"}
+          data={orderSummary?.todayOrder}
           status="down"
         />
         <StatisticCard
@@ -52,7 +73,7 @@ function Dashboard() {
             darkEffectColor: "rgb(187, 247, 209)",
           }}
           title={"Completed Order"}
-          data={"356"}
+          data={orderSummary?.successfulOrder}
           status="up"
           icon={<i className="fa-regular fa-circle-check"></i>}
         />
@@ -64,7 +85,7 @@ function Dashboard() {
             darkEffectColor: "rgb(254, 203, 202)",
           }}
           title={"Pending Orders"}
-          data={"4"}
+          data={orderSummary?.pendingOrder}
           isRise={false}
           icon={<i className="fa-solid fa-exclamation"></i>}
         />
@@ -87,7 +108,7 @@ function Dashboard() {
                 tooltip: {
                   callbacks: {
                     label: function (context) {
-                      return `${Intl.NumberFormat("vn").format(context.parsed.y)} VND`;
+                      return `${formatNumber(context.parsed.y)} VND`;
                     },
                   },
                 },
@@ -98,7 +119,7 @@ function Dashboard() {
         <div className="mt-4 flex items-center justify-center rounded-md bg-white lg:mt-0">
           <div className="flex items-center rounded-md p-4">
             <DoughnutChart
-              data={dognutData}
+              data={dognutData(paymentStatistic)}
               options={{
                 plugins: {
                   title: {
@@ -129,6 +150,12 @@ function Dashboard() {
       </div>
     </div>
   );
+}
+
+export async function loader() {
+  const data = await getDashBoardData();
+
+  return data;
 }
 
 export default Dashboard;

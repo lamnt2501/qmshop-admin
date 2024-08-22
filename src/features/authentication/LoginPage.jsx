@@ -73,9 +73,8 @@ export async function action({ request }) {
   const formData = Object.fromEntries(await request.formData());
   const data = await login(formData.email, formData.password);
   const res = {};
-
-  if (data.token) res.token = data.token;
-  if (data.error) res.error = data.error;
+  res.token = data.token;
+  res.error = data.error;
   return res;
 }
 

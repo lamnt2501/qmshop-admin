@@ -4,8 +4,10 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { useState } from "react";
 import formatDate from "../../utils/formatDate";
 import ProductBestSellerItem from "./ProductBestSellerItem";
+import { useSelector } from "react-redux";
 
 function ProductBestSellerList() {
+  const { bestProducts } = useSelector((s) => s.dashboard);
   const [date, setDate] = useState(null);
   return (
     <div className="rounded-md bg-white">
@@ -39,8 +41,12 @@ function ProductBestSellerList() {
       </div>
       <Divider />
       <List disablePadding>
-        {[0, 0, 0, 0, 0, 0, 0, 0].map((_, i, arr) => (
-          <ProductBestSellerItem key={i} divider={i < arr.length - 1} />
+        {(bestProducts || []).map((product, i, arr) => (
+          <ProductBestSellerItem
+            key={i}
+            divider={i < arr.length - 1}
+            product={product}
+          />
         ))}
       </List>
     </div>

@@ -18,6 +18,7 @@ import { faker } from "@faker-js/faker";
 import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
 import { useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const baseColumnDef = { headerAlign: "center", align: "center", minWidth: 150 };
 const columns = [
@@ -25,6 +26,9 @@ const columns = [
     ...baseColumnDef,
     field: "id",
     headerName: "Order ID",
+    renderCell: ({ value }) => {
+      return <Link to={`/orders/${value}`}>{value}</Link>;
+    },
     width: 90,
   },
   {
@@ -127,39 +131,44 @@ const rows = "0"
 
 function OrderDashboard() {
   const apiRef = useGridApiRef();
-
+  const navigate = useNavigate();
   return (
-    <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
-      <DataGrid
-        apiRef={apiRef}
-        rows={rows}
-        columns={columns}
-        disableColumnFilter
-        density="comfortable"
-        disableColumnSelector
-        disableRowSelectionOnClick
-        disableDensitySelector
-        onCellClick={(o) => {
-          if (o.colDef.editable && o.cellMode === "view")
-            apiRef.current.startCellEditMode({ id: o.id, field: o.field });
-        }}
-        processRowUpdate={(n, o) => {
-          return n;
-        }}
-        onProcessRowUpdateError={(err) => {
-          console.log(err ? "yes" : "no");
-        }}
-        slots={{ toolbar: GridToolbar }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          sorting: { sortModel: [{ field: "date", sort: "desc" }] },
-        }}
-      />
-    </Box>
+    <div className="space-y-4">
+      <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
+        <DataGrid
+          apiRef={apiRef}
+          rows={rows}
+          columns={columns}
+          disableColumnFilter
+          density="comfortable"
+          disableColumnSelector
+          disableRowSelectionOnClick
+          disableDensitySelector
+          onCellClick={(params) => {
+            if (params.colDef.editable && params.cellMode === "view")
+              apiRef.current.startCellEditMode({
+                id: params.id,
+                field: params.field,
+              });
+          }}
+          processRowUpdate={(newRow, oldRow) => {
+            return newRow;
+          }}
+          onProcessRowUpdateError={(err) => {
+            console.log(err ? "yes" : "no");
+          }}
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+            },
+          }}
+          initialState={{
+            sorting: { sortModel: [{ field: "date", sort: "desc" }] },
+          }}
+        />
+      </Box>
+    </div>
   );
 }
 

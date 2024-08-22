@@ -1,13 +1,14 @@
 import { Provider } from "react-redux";
 import {
   createBrowserRouter,
-  createRoutesFromElements,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-// import store from "./states/store";
+import store from "./states/store";
 import AppLayout from "./ui/AppLayout";
-import Dashboard from "./features/dashboard/Dashboard";
+import Dashboard, {
+  loader as dashboardLoader,
+} from "./features/dashboard/Dashboard";
 import LoginPage, {
   action as loginAction,
 } from "./features/authentication/LoginPage";
@@ -15,6 +16,8 @@ import Error from "./ui/Error";
 import { AuthProvider } from "./contexts/authContext";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import OrderDashboard from "./features/order/OrderDashboard";
+import OrderDetails from "./features/order/OrderDetails";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +35,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+        loader: dashboardLoader,
       },
       {
         path: "orders",
@@ -39,7 +43,7 @@ const router = createBrowserRouter([
       },
       {
         path: "orders/:id",
-        element: <Dashboard />,
+        element: <OrderDetails />,
       },
       {
         path: "products",
@@ -80,11 +84,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    // <Provider store={store}>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-    // </Provider>
+    <Provider store={store}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </Provider>
   );
 }
 export default App;
