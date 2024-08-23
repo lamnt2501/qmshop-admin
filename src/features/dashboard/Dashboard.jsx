@@ -1,8 +1,8 @@
 import { buildChartData } from "../../configs/charjsConfig";
 import ProductBestSellerList from "./ProductBestSellerList";
-import BarChart from "./BarChart";
+import BarChart from "../../ui/chart/BarChart";
 import CustomerRank from "./CustomerRank";
-import DoughnutChart from "./DoughnutChart";
+import DoughnutChart from "../../ui/chart/DoughnutChart";
 import StatisticCard from "./StatisticCard";
 import getDashBoardData from "../../apis/dashboard/dashboardApi";
 import { useLoaderData } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataLoaded } from "../../states/slices/dashboardSlice";
 import { formatNumber } from "../../utils/utils";
+import LineChart from "../../ui/chart/LineChart";
 
 const data = buildChartData(
   [0, 0, 0, 0, 0, 0, 0].map(() => Math.random() * 2000000),
@@ -17,7 +18,31 @@ const data = buildChartData(
   "Revenue",
 );
 
-function dognutData(paymentStatistic = {}) {
+function revenueChartData(revenue, type) {
+  const labels = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const renderLabels = labels.slice(
+    0,
+    labels.indexOf(labels[new Date().getMonth()]) + 1,
+  );
+
+  const values = renderLabels.map((l) => revenue?.[l.toUpperCase()] || 0);
+  return buildChartData(values, renderLabels, "Revenue");
+}
+
+function dognutChartData(paymentStatistic = {}) {
   const keys = Object.keys(paymentStatistic);
   const total = Object.values(paymentStatistic)?.reduce(
     (pre, cur) => pre + cur,
@@ -32,7 +57,11 @@ function dognutData(paymentStatistic = {}) {
 function Dashboard() {
   const dispatch = useDispatch();
   const loaderData = useLoaderData();
-  const { orderSummary, paymentStatistic } = useSelector((s) => s.dashboard);
+  const { orderSummary, paymentStatistic, revenue } = useSelector(
+    (s) => s.dashboard,
+  );
+
+  console.log(revenue);
 
   useEffect(() => {
     if (!loaderData.error) dispatch(dataLoaded(loaderData));
@@ -92,9 +121,31 @@ function Dashboard() {
       </div>
       <div className="space-x-4 lg:grid lg:grid-cols-[70%_30%]">
         <div className="px rounded-md bg-white p-3">
-          <BarChart
+          {/* <BarChart
             data={data}
             className="w-full"
+            options={{
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Revenue in 2024",
+                },
+                legend: {
+                  display: false,
+                },
+                responsive: true,
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return `${formatNumber(context.parsed.y)} VND`;
+                    },
+                  },
+                },
+              },
+            }}
+          /> */}
+          <LineChart
+            data={revenueChartData(revenue, "year")}
             options={{
               plugins: {
                 title: {
@@ -119,7 +170,7 @@ function Dashboard() {
         <div className="mt-4 flex items-center justify-center rounded-md bg-white lg:mt-0">
           <div className="flex items-center rounded-md p-4">
             <DoughnutChart
-              data={dognutData(paymentStatistic)}
+              data={dognutChartData(paymentStatistic)}
               options={{
                 plugins: {
                   title: {

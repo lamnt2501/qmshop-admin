@@ -19,6 +19,7 @@ import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import fetchOrder from "../../apis/order/fetchOrder";
 
 const baseColumnDef = { headerAlign: "center", align: "center", minWidth: 150 };
 const columns = [
@@ -230,4 +231,7 @@ function RenderOrderStatusEditCell({
   );
 }
 
+export async function loader() {
+  return { orders: await fetchOrder() };
+}
 export default OrderDashboard;
