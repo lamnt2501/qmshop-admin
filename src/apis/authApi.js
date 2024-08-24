@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VITE_AUTH_API_URL } from "../../configs/envConfig";
+import { VITE_AUTH_API_URL } from "../configs/envConfig";
 
 export async function login(email, password) {
   const res = {};

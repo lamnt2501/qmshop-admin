@@ -7,7 +7,7 @@ import {
   useNavigation,
 } from "react-router-dom";
 import { useEffect } from "react";
-import { login } from "../../apis/authentication/authApi";
+import { login } from "../../apis/authApi";
 import Loader from "../../ui/Loader";
 
 function LoginPage() {

@@ -15,8 +15,13 @@ import LoginPage, {
 import Error from "./ui/Error";
 import { AuthProvider } from "./contexts/authContext";
 import ProtectedRoute from "./ui/ProtectedRoute";
-import OrderDashboard from "./features/order/OrderDashboard";
-import OrderDetails from "./features/order/OrderDetails";
+import OrderDashboard, {
+  loader as orderLoader,
+} from "./features/order/OrderDashboard";
+import OrderDetails, {
+  action as orderDetailsAction,
+  loader as orderDetailsLoader,
+} from "./features/order/OrderDetails";
 
 const router = createBrowserRouter([
   {
@@ -36,18 +41,23 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <Dashboard />,
         loader: dashboardLoader,
+        id: "dashboard",
       },
       {
         path: "orders",
         element: <OrderDashboard />,
+        loader: orderLoader,
       },
       {
+        id: "orderDetails",
         path: "orders/:id",
         element: <OrderDetails />,
+        loader: orderDetailsLoader,
+        action: orderDetailsAction,
       },
       {
         path: "products",
-        element: <Dashboard />,
+        element: <p>hi</p>,
         children: [
           { index: true, element: <p>hi</p> },
           {

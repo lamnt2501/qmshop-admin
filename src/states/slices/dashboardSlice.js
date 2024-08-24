@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchBestProduct } from "../../apis/dashboard/dashboardApi";
+import { fetchBestProduct } from "../../apis/dashboardApi";
 
 const dashboardSlice = createSlice({
   name: "dashboard",

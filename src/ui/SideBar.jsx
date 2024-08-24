@@ -29,14 +29,8 @@ function SideBar() {
           to="/orders"
           title="Order"
           icon={<i className="fa-solid fa-bag-shopping"></i>}
-        />
-
-        <NavItem
-          to="/products"
-          icon={<i className="fa-solid fa-store"></i>}
-          title="Product"
         >
-          <ul className="ml-2 mt-2 space-y-1 transition-all">
+          {/* <ul className="ml-2 mt-2 space-y-1 transition-all">
             <div className="border-l-2 border-purple-500 px-2">
               <NavItem
                 to="/products/new"
@@ -61,7 +55,40 @@ function SideBar() {
                 icon={<i className="fa-solid fa-truck-fast"></i>}
               />
             </div>
-          </ul>
+          </ul> */}
+        </NavItem>
+
+        <NavItem
+          to="/products"
+          icon={<i className="fa-solid fa-store"></i>}
+          title="Product"
+        >
+          {/* <ul className="ml-2 mt-2 space-y-1 transition-all">
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/orders/:id"
+                size="sm"
+                title="New Product"
+                icon={<i className="fa-solid fa-truck-fast"></i>}
+              />
+            </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/category"
+                size="sm"
+                title="Category"
+                icon={<i className="fa-solid fa-truck-fast"></i>}
+              />
+            </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/size"
+                size="sm"
+                title="Size"
+                icon={<i className="fa-solid fa-truck-fast"></i>}
+              />
+            </div>
+          </ul> */}
         </NavItem>
 
         <NavItem
@@ -83,15 +110,16 @@ function SideBar() {
 const NavItem = memo(
   function NavItem({ children, to, icon, title, size }) {
     const [open, setOpen] = useState(false);
-    const { pathname } = useLocation();
-    useEffect(() => {
-      if (
-        to.startsWith("/" + title.toLowerCase()) !==
-        pathname.startsWith("/" + title.toLowerCase())
-      ) {
-        setOpen(false);
-      } else setOpen(true);
-    }, [to, pathname]);
+
+    // const { pathname } = useLocation();
+    // useEffect(() => {
+    //   if (
+    //     to.startsWith("/" + title.toLowerCase()) !==
+    //     pathname.startsWith("/" + title.toLowerCase())
+    //   ) {
+    //     setOpen(false);
+    //   } else setOpen(true);
+    // }, [to, pathname]);
 
     return (
       <li>

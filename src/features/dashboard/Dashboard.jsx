@@ -4,7 +4,7 @@ import BarChart from "../../ui/chart/BarChart";
 import CustomerRank from "./CustomerRank";
 import DoughnutChart from "../../ui/chart/DoughnutChart";
 import StatisticCard from "./StatisticCard";
-import getDashBoardData from "../../apis/dashboard/dashboardApi";
+import { getDashBoardData } from "../../apis/dashboardApi";
 import { useLoaderData } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,16 +12,10 @@ import { dataLoaded } from "../../states/slices/dashboardSlice";
 import { formatNumber } from "../../utils/utils";
 import LineChart from "../../ui/chart/LineChart";
 
-const data = buildChartData(
-  [0, 0, 0, 0, 0, 0, 0].map(() => Math.random() * 2000000),
-  ["January", "Febuary", "March", "April", "May", "June", "July"],
-  "Revenue",
-);
-
 function revenueChartData(revenue, type) {
   const labels = [
     "January",
-    "Febuary",
+    "February",
     "March",
     "April",
     "May",
@@ -57,14 +51,10 @@ function dognutChartData(paymentStatistic = {}) {
 function Dashboard() {
   const dispatch = useDispatch();
   const loaderData = useLoaderData();
-  const { orderSummary, paymentStatistic, revenue } = useSelector(
-    (s) => s.dashboard,
-  );
-
-  console.log(revenue);
+  const { orderSummary, paymentStatistic, revenue, error } = loaderData;
 
   useEffect(() => {
-    if (!loaderData.error) dispatch(dataLoaded(loaderData));
+    if (!error) dispatch(dataLoaded(loaderData));
   }, [loaderData]);
 
   return (

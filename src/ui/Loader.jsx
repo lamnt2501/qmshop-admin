@@ -1,6 +1,6 @@
 function Loader() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-stone-500/20 backdrop-blur-sm">
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-[100000] flex items-center justify-center bg-stone-500/20 backdrop-blur-sm">
       <div className="loader">
         <div className="truckWrapper">
           <div className="truckBody">

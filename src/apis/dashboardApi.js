@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { VITE_MANAGEMENT_API_URL } from "../../configs/envConfig";
+import { VITE_MANAGEMENT_API_URL } from "../configs/envConfig";
 
 async function getDashBoardData() {
   const token = Cookies.get("accessToken");
@@ -59,5 +59,4 @@ async function fetchBestProduct(time) {
 
 async function fetchRevenue(time) {}
 
-export { fetchBestProduct, fetchRevenue };
-export default getDashBoardData;
+export { fetchBestProduct, fetchRevenue, getDashBoardData };

@@ -1,45 +1,34 @@
-import {
-  Box,
-  Chip,
-  Dialog,
-  DialogTitle,
-  MenuItem,
-  Select,
-  Snackbar,
-  Stack,
-} from "@mui/material";
+import { Box, Chip, MenuItem, Select } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
   useGridApiContext,
   useGridApiRef,
 } from "@mui/x-data-grid";
-import { faker } from "@faker-js/faker";
 import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
-import { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import fetchOrder from "../../apis/order/fetchOrder";
+import { useEffect, useMemo } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { fetchOrders } from "../../apis/orderApi";
+import { useDispatch } from "react-redux";
+import { dataLoaded } from "../../states/slices/orderSlice";
+import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 
-const baseColumnDef = { headerAlign: "center", align: "center", minWidth: 150 };
 const columns = [
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     field: "id",
     headerName: "Order ID",
-    renderCell: ({ value }) => {
-      return <Link to={`/orders/${value}`}>{value}</Link>;
-    },
     width: 90,
   },
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     align: "left",
     field: "customerName",
     headerName: "Customer Name",
   },
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     field: "date",
     type: "date",
     headerName: "Date",
@@ -53,22 +42,22 @@ const columns = [
   },
 
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     field: "status",
     type: "singleSelect",
     resizable: false,
-    valueOptions: ["WAITING", "APPROVED", "SHIPPING", "SUCCESS", "CANCEL"],
+    valueOptions: ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"],
     headerName: "Order Status",
     renderCell: function ({ value }) {
       return renderOrderStatusCell(value);
     },
-    renderEditCell: (params) => {
-      return RenderOrderStatusEditCell(params);
-    },
-    editable: true,
+    // renderEditCell: (params) => {
+    //   return RenderOrderStatusEditCell(params);
+    // },
+    // editable: true,
   },
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     field: "amount",
     type: "number",
     headerName: "Amount",
@@ -77,7 +66,7 @@ const columns = [
     },
   },
   {
-    ...baseColumnDef,
+    ...BASE_COL_DEF,
     width: 200,
     field: "paymentStatus",
     resizable: false,
@@ -109,63 +98,85 @@ const columns = [
   },
 ];
 
-const rows = "0"
-  .repeat(100)
-  .split("")
-  .map((_, i) => {
+const buildRows = (data) =>
+  data?.map((order) => {
     return {
-      id: i + 1,
-      customerName: faker.person.fullName(),
-      date: faker.date.between({
-        from: "2024-01-01T00:00:00.000Z",
-        to: new Date().toUTCString(),
-      }),
-      amount: Math.floor(Math.random() * 1000000) + 100000,
-      status: ["WAITING", "APPROVED", "SHIPPING", "SUCCESS", "CANCEL"][
-        Math.floor(Math.random() * 5)
-      ],
-      paymentStatus: ["PAID", "UNPAID", "PROCESSING", "CANCEL"][
-        Math.floor(Math.random() * 4)
-      ],
+      id: order.orderId,
+      customerName: order.customerName,
+      date: new Date(order.createdAt),
+      amount: order.total,
+      status: order.status,
+      paymentStatus: order.paymentStatus,
     };
   });
 
 function OrderDashboard() {
   const apiRef = useGridApiRef();
+  const data = useLoaderData();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const paginationModel = useMemo(() => {
+    return { page: 0, pageSize: 10 };
+  }, []);
+
+  const initialDataGridState = useMemo(() => {
+    return {
+      sorting: { sortModel: [{ field: "date", sort: "desc" }] },
+    };
+  }, []);
+
+  useEffect(() => {
+    if (data && !data?.error) dispatch(dataLoaded());
+  }, [data]);
+
   return (
     <div className="space-y-4">
       <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
         <DataGrid
           apiRef={apiRef}
-          rows={rows}
+          rows={buildRows(data)}
           columns={columns}
           disableColumnFilter
           density="comfortable"
           disableColumnSelector
           disableRowSelectionOnClick
           disableDensitySelector
-          onCellClick={(params) => {
-            if (params.colDef.editable && params.cellMode === "view")
-              apiRef.current.startCellEditMode({
-                id: params.id,
-                field: params.field,
-              });
-          }}
-          processRowUpdate={(newRow, oldRow) => {
-            return newRow;
-          }}
-          onProcessRowUpdateError={(err) => {
-            console.log(err ? "yes" : "no");
-          }}
+          paginationModel={paginationModel}
+          initialState={initialDataGridState}
+          pageSizeOptions={[10, 20]}
+          // onCellClick={(params) => {
+          //   if (params.colDef.editable && params.cellMode === "view")
+          //     apiRef.current.startCellEditMode({
+          //       id: params.id,
+          //       field: params.field,
+          //     });
+          // }}
+          // processRowUpdate={async (newRow, oldRow) => {
+          //   if (newRow.status === oldRow.status) return oldRow;
+          //   const res = await updateOrderStatus(newRow.id, newRow.status);
+          //   setSnackBarSate((s) => {
+          //     return { ...s, open: true, content: "Order Update Success!" };
+          //   });
+          //   if (res.error) throw new Error(res.error.response?.data?.message);
+          //   return newRow;
+          // }}
+          // onProcessRowUpdateError={(err) => {
+          //   setSnackBarSate((s) => {
+          //     return { ...s, open: true, content: err.message };
+          //   });
+          // }}
+          onRowClick={({ row: { id } }) => navigate(`/orders/${id}`)}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
             toolbar: {
               showQuickFilter: true,
             },
           }}
-          initialState={{
-            sorting: { sortModel: [{ field: "date", sort: "desc" }] },
+          sx={{
+            "& .MuiDataGrid-row:hover": {
+              cursor: "pointer",
+            },
           }}
         />
       </Box>
@@ -186,7 +197,7 @@ function renderOrderStatusCell(value) {
       color: "secondary",
       icon: <i className="fa-solid fa-truck-fast"></i>,
     }) ||
-    (value === "SUCCESS" && {
+    (value === "SUCCEEDED" && {
       color: "success",
       icon: <i className="fa-regular fa-circle-check"></i>,
     }) || {
@@ -213,7 +224,7 @@ function RenderOrderStatusEditCell({
 }) {
   const apiRef = useGridApiContext();
   const renderOptions =
-    value !== "SUCCESS" && value !== "CANCEL"
+    value !== "SUCCEEDED" && value !== "CANCEL"
       ? valueOptions.slice(valueOptions.indexOf(value))
       : [value];
   function handleChange(e) {
@@ -232,6 +243,9 @@ function RenderOrderStatusEditCell({
 }
 
 export async function loader() {
-  return { orders: await fetchOrder() };
+  const res = await fetchOrders();
+  if (res.error) throw res.error;
+  return res;
 }
+
 export default OrderDashboard;

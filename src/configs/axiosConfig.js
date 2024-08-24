@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { VITE_MANAGEMENT_API_URL } from "./envConfig";
+
 export default function axiosFactory() {
   const token = Cookies.get("accessToken");
   return axios.create({

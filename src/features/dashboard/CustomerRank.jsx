@@ -1,9 +1,10 @@
 import { Avatar, Badge, Chip, LinearProgress } from "@mui/material";
 import { useSelector } from "react-redux";
 import formatNumber from "../../utils/formatNumber";
+import { useRouteLoaderData } from "react-router-dom";
 
 function CustomerRank() {
-  const { topCustomer } = useSelector((s) => s.dashboard);
+  const { topCustomer } = useRouteLoaderData("dashboard");
 
   return (
     <div className="h-fit rounded-md bg-white p-4">
@@ -17,7 +18,7 @@ function CustomerRank() {
             level={2}
             className="relative rounded-md bg-[#f2f0fe] p-6 pt-10 text-center"
             avtSize={56}
-            customer={topCustomer[1]}
+            customer={topCustomer?.[1]}
             ring={true}
           />
           <TopCustomerCard
@@ -26,7 +27,7 @@ function CustomerRank() {
             className="relative -translate-y-6 rounded-md bg-[#dcfce7] p-6 pt-10 text-center"
             avtSize={56}
             ring={true}
-            customer={topCustomer[0]}
+            customer={topCustomer?.[0]}
             crown={true}
           />
           <TopCustomerCard
@@ -34,7 +35,7 @@ function CustomerRank() {
             level={3}
             className="relative rounded-md bg-[#f2f0fe] p-6 pt-10 text-center"
             avtSize={56}
-            customer={topCustomer[2]}
+            customer={topCustomer?.[2]}
             ring={true}
           />
         </div>
@@ -57,20 +58,37 @@ const color = ["error", "warning", "secondary", "primary", "info", "success"];
 const rank = [2000000, 5000000, 10000000, 20000000, 50000000];
 const getProgressColor = (percent) => {
   if (percent >= 90) return "success";
-  if (percent >= 90) return "info";
-  if (percent >= 90) return "primary";
-  if (percent >= 90) return "secondary";
-  if (percent >= 90) return "warning";
+  if (percent >= 80) return "info";
+  if (percent >= 70) return "primary";
+  if (percent >= 60) return "secondary";
+  if (percent >= 50) return "warning";
   return "error";
 };
-const getRankColor = (rank) => {
-  if (rank === "Diamond") return "cyan-300";
-  if (rank === "Emerald") return "emerald-200";
-  if (rank === "Golden") return "yellow-400";
-  if (rank === "Silver") return "slate-400";
-  if (rank === "Bronze") return "amber-700";
+const getRankColor = (rank, type) => {
+  if (rank === "Diamond") {
+    if (type === "ring") return `ring-cyan-300`;
+    if (type === "text") return `text-cyan-300`;
+  }
+  if (rank === "Emerald") {
+    if (type === "ring") return `ring-emerald-200`;
+    if (type === "text") return `text-emerald-200`;
+  }
+  if (rank === "Golden") {
+    if (type === "ring") return `ring-yellow-400`;
+    if (type === "text") return `text-yellow-400`;
+  }
+  if (rank === "Silver") {
+    if (type === "ring") return `ring-slate-400`;
+    if (type === "text") return `text-slate-400`;
+  }
+  if (rank === "Bronze") {
+    if (type === "ring") return `ring-amber-700`;
+    if (type === "text") return `text-amber-700`;
+  }
+
   return "";
 };
+
 function TopCustomerCard({
   className,
   level,
@@ -83,6 +101,7 @@ function TopCustomerCard({
   const percent = Math.floor(
     (customer?.spend * 100) / rank.filter((v) => v > customer?.spend)[0],
   );
+  let ringColor = getRankColor(customer?.memberShipClass, "ring");
 
   return (
     <div className={className}>
@@ -106,7 +125,7 @@ function TopCustomerCard({
               width: avtSize,
               height: avtSize,
             }}
-            className={`${customer?.memberShipClass && "ring " + ("ring-" + getRankColor(customer?.memberShipClass))}`}
+            className={`${customer?.memberShipClass && `ring ${ringColor}`}`}
           >
             {customer?.name.split(" ").at(-1)[0].toUpperCase()}
           </Avatar>
@@ -114,7 +133,7 @@ function TopCustomerCard({
         {customer?.memberShipClass && (
           <div className="absolute left-1/2 top-0 -translate-x-[50%] -translate-y-full">
             <i
-              className={`fa-solid fa-crown ${customer?.memberShipClass && "text-" + getRankColor(customer?.memberShipClass)}`}
+              className={`fa-solid fa-crown ${customer?.memberShipClass && getRankColor(customer?.memberShipClass, "text")}`}
             ></i>
           </div>
         )}
