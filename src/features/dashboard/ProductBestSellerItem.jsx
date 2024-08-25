@@ -6,6 +6,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import { formatNumber } from "../../utils/utils";
 
 function ProductBestSellerItem({ divider, product }) {
@@ -35,4 +36,8 @@ function ProductBestSellerItem({ divider, product }) {
   );
 }
 
+ProductBestSellerItem.propTypes = {
+  divider: PropTypes.bool,
+  product: PropTypes.object,
+};
 export default ProductBestSellerItem;

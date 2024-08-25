@@ -2,23 +2,12 @@ import { Link, useLoaderData } from "react-router-dom";
 import { fetchOrder, updateOrderStatus } from "../../apis/orderApi";
 import { DataGrid } from "@mui/x-data-grid";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  Step,
-  StepLabel,
-  Stepper,
-} from "@mui/material";
-import { formatDate, formatNumber } from "../../utils/utils";
+import { Avatar, Box, Chip, Divider, Stepper } from "@mui/material";
+import PropTypes from "prop-types";
+import { formatNumber } from "../../utils/utils";
 import UpdateStatusForm from "./UpdateStatusForm";
 import OrderStatusTrackingStep from "./OrderStatusTrackingstep";
-import {
-  fetchCustomerByEmail,
-  fetchCustomerById,
-} from "../../apis/customerApi";
-
+import { fetchCustomerByEmail } from "../../apis/customerApi";
 const buildRows = (items) =>
   items?.map((item) => {
     return {
@@ -106,7 +95,7 @@ function OrderDetails() {
     (pre, cur) => pre + cur.price * cur.quantity,
     0,
   );
-  console.log(order);
+
   return (
     <div className="grid grid-cols-[70%_30%] space-x-4 rounded-md">
       <div className="space-y-4">
@@ -344,7 +333,7 @@ function OrderDetails() {
 }
 
 function PaymentStatus({ value }) {
-  const props = (value === "UNPAID" && {
+  const p = (value === "UNPAID" && {
     color: "warning",
     icon: <i className="fa-solid fa-sack-xmark"></i>,
   }) ||
@@ -360,13 +349,18 @@ function PaymentStatus({ value }) {
   return (
     <Chip
       label={`${value}`}
-      color={props.color}
+      color={p.color}
       className="w-[150px]"
-      icon={props.icon}
+      icon={p.icon}
       variant="outlined"
     />
   );
 }
+
+PaymentStatus.propTypes = {
+  value: PropTypes.string,
+};
+
 function getRowId(row) {
   return row.id;
 }

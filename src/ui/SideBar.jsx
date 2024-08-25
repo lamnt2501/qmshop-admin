@@ -1,5 +1,6 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { memo, useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { memo, useState } from "react";
+import PropTypes from "prop-types";
 
 function SideBar() {
   return (
@@ -146,8 +147,17 @@ const NavItem = memo(
       </li>
     );
   },
-  (curProps, newProps) => {
+  () => {
     return true;
   },
 );
+
+NavItem.propTypes = {
+  to: PropTypes.string,
+  size: PropTypes.number,
+  children: PropTypes.func,
+  icon: PropTypes.object,
+  title: PropTypes.any,
+};
+
 export default SideBar;

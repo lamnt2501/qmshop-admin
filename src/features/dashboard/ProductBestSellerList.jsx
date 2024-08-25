@@ -1,14 +1,13 @@
 import { Divider, List } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import formatDate from "../../utils/formatDate";
 import ProductBestSellerItem from "./ProductBestSellerItem";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function ProductBestSellerList() {
   const { bestProducts } = useSelector((s) => s.dashboard);
-  const dispatch = useDispatch();
   const [date, setDate] = useState(null);
 
   return (

@@ -1,4 +1,4 @@
-import { Avatar, Menu, MenuItem } from "@mui/material";
+import { Avatar } from "@mui/material";
 import BreadcrumbsCustom from "./BreadcrumbsCustom.jsx";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext.jsx";

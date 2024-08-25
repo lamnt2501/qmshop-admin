@@ -1,6 +1,6 @@
 import { Avatar, Step, StepLabel } from "@mui/material";
 import formatDate from "../../utils/formatDate";
-
+import PropTypes from "prop-types";
 const labelMap = {
   WAITING: "Order Placed",
   APPROVED: "Processed",
@@ -69,3 +69,8 @@ export default function OrderStatusTrackingStep({ tracking, completed }) {
     </Step>
   );
 }
+
+OrderStatusTrackingStep.propTypes = {
+  tracking: PropTypes.object,
+  completed: PropTypes.bool,
+};

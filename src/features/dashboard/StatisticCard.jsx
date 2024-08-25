@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 function StatisticCard({
   icon,
   themeColors: {
@@ -47,5 +48,13 @@ function StatisticCard({
     </div>
   );
 }
+
+StatisticCard.propTypes = {
+  icon: PropTypes.node,
+  themeColors: PropTypes.object,
+  title: PropTypes.string,
+  data: PropTypes.number,
+  status: PropTypes.string,
+};
 
 export default StatisticCard;

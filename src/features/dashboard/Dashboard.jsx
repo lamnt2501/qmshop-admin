@@ -1,18 +1,19 @@
 import { buildChartData } from "../../configs/charjsConfig";
 import ProductBestSellerList from "./ProductBestSellerList";
-import BarChart from "../../ui/chart/BarChart";
+// import BarChart from "../../ui/chart/BarChart";
 import CustomerRank from "./CustomerRank";
 import DoughnutChart from "../../ui/chart/DoughnutChart";
 import StatisticCard from "./StatisticCard";
 import { getDashBoardData } from "../../apis/dashboardApi";
 import { useLoaderData } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { dataLoaded } from "../../states/slices/dashboardSlice";
 import { formatNumber } from "../../utils/utils";
 import LineChart from "../../ui/chart/LineChart";
 
 function revenueChartData(revenue, type) {
+  console.log(type);
   const labels = [
     "January",
     "February",

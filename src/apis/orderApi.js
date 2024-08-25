@@ -1,6 +1,6 @@
 import axiosFactory from "../configs/axiosConfig";
 
-export async function fetchOrders(params) {
+export async function fetchOrders() {
   const api = axiosFactory();
   try {
     return (await api.get("/orders")).data;

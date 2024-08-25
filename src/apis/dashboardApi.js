@@ -47,7 +47,7 @@ async function getDashBoardData() {
   }
 }
 
-async function fetchBestProduct(time) {
+async function fetchBestProduct() {
   try {
     const data = (await axios.get(`http://localhost:80/api/v1/products`)).data;
     console.log(data);
@@ -57,6 +57,6 @@ async function fetchBestProduct(time) {
   }
 }
 
-async function fetchRevenue(time) {}
+async function fetchRevenue() {}
 
 export { fetchBestProduct, fetchRevenue, getDashBoardData };
