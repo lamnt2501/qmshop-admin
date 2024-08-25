@@ -1,10 +1,4 @@
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { fetchOrder, updateOrderStatus } from "../../apis/orderApi";
 import { DataGrid } from "@mui/x-data-grid";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
@@ -13,17 +7,17 @@ import {
   Box,
   Chip,
   Divider,
-  Input,
-  MenuItem,
-  Select,
   Step,
-  StepIcon,
   StepLabel,
   Stepper,
-  TextField,
 } from "@mui/material";
 import { formatDate, formatNumber } from "../../utils/utils";
-import { useState } from "react";
+import UpdateStatusForm from "./UpdateStatusForm";
+import OrderStatusTrackingStep from "./OrderStatusTrackingstep";
+import {
+  fetchCustomerByEmail,
+  fetchCustomerById,
+} from "../../apis/customerApi";
 
 const buildRows = (items) =>
   items?.map((item) => {
@@ -35,9 +29,11 @@ const buildRows = (items) =>
       total: item.price * item.quantity,
     };
   });
+
 const renderCell = (value) => {
   return <div className="flex h-full items-center justify-center">{value}</div>;
 };
+
 const columns = [
   {
     ...BASE_COL_DEF,
@@ -103,12 +99,14 @@ const columns = [
 const valueOptions = ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"];
 
 function OrderDetails() {
-  const order = useLoaderData();
+  const { order, customer } = useLoaderData();
+  const [specificAddress, ward, district, city] =
+    order?.address.split(", ") || [];
   const subTotal = order.items.reduce(
     (pre, cur) => pre + cur.price * cur.quantity,
     0,
   );
-  console.log(order.tracking);
+  console.log(order);
   return (
     <div className="grid grid-cols-[70%_30%] space-x-4 rounded-md">
       <div className="space-y-4">
@@ -150,16 +148,16 @@ function OrderDetails() {
           <div className="flex justify-end p-4">
             <div className="w-1/3 text-slate-500">
               <p className="flex justify-between font-medium">
-                <span>Sub Total: </span>
+                <span>Sub Total : </span>
                 <span>{formatNumber(subTotal)} VND</span>
               </p>
               <p className="flex justify-between py-4 font-medium">
-                <span>Discount: </span>
+                <span>Discount : </span>
                 <span>- {0} VND</span>
               </p>
               <Divider />
               <p className="flex justify-between pt-4 font-medium">
-                <span>Total: </span>
+                <span>Total : </span>
                 <span>{formatNumber(subTotal)} VND</span>
               </p>
             </div>
@@ -169,139 +167,223 @@ function OrderDetails() {
           <div className="flex justify-between">
             <div className="flex items-center space-x-4 font-semibold">
               <span>Order Status</span>{" "}
-              {/* <span>
-                <OrderStatus status={order.status} />
-              </span> */}
             </div>
             <UpdateStatusForm curStatus={order.status} />
           </div>
-          <Stepper activeStep={order.tracking.length} alternativeLabel>
-            {order.tracking.map((t) => {
-              const props = (t.status === "WAITING" && {
-                color: "warning",
-                icon: <i className="fa-regular fa-clock"></i>,
-              }) ||
-                (t.status === "APPROVED" && {
-                  color: "info",
-                  icon: <i className="fa-solid fa-check-double"></i>,
-                }) ||
-                (t.status === "SHIPPING" && {
-                  color: "secondary",
-                  icon: <i className="fa-solid fa-truck-fast"></i>,
-                }) ||
-                (t.status === "SUCCEEDED" && {
-                  color: "success",
-                  icon: <i className="fa-regular fa-circle-check"></i>,
-                }) || {
-                  color: "error",
-                  icon: <i className="fa-solid fa-ban"></i>,
-                };
+          <hr className="my-4" />
+          <div className="px-4">
+            <Stepper orientation="vertical">
+              {order.tracking.map((t) => (
+                // <Step key={t.status}>
+                //   <StepLabel
+                //     StepIconComponent={() => {
+                //       const icon = (t.status === "APPROVED" && (
+                //         <i className="fa-solid fa-check-double"></i>
+                //       )) ||
+                //         (t.status === "SHIPPING" && (
+                //           <i className="fa-solid fa-truck-fast"></i>
+                //         )) ||
+                //         (t.status === "SUCCEEDED" && (
+                //           <i className="fa-regular fa-circle-check"></i>
+                //         )) || <i className="fa-solid fa-ban"></i>;
 
-              return (
-                <Step key={t.status}>
-                  <StepLabel>{t.status}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
+                //       return (
+                //         <Avatar
+                //           sx={{
+                //             backgroundColor:
+                //               t.status !== "CALCEL" ? "#68db7f" : "red",
+                //           }}
+                //         >
+                //           {icon}
+                //         </Avatar>
+                //       );
+                //     }}
+                //   >
+                //     <div>
+                //       <p>{labelMap[t.status]}</p>
+                //     </div>
+                //   </StepLabel>
+                // </Step>
+                <OrderStatusTrackingStep
+                  key={t.status}
+                  completed={true}
+                  tracking={t}
+                />
+              ))}
+              {valueOptions.indexOf(order.status) < 3 &&
+                valueOptions
+                  .slice(valueOptions.indexOf(order.status) + 1, 4)
+                  .map((s) => {
+                    return (
+                      <OrderStatusTrackingStep
+                        key={s}
+                        tracking={{ status: s }}
+                      />
+                    );
+                  })}
+            </Stepper>
+          </div>
         </div>
       </div>
-      <div>2</div>
+      <div className="space-y-4">
+        <div className="rounded-md bg-white px-4">
+          <div className="flex justify-between py-4">
+            <p className="space-x-2 font-medium">
+              <i className="fa-regular fa-user"></i>
+              <span>Customer Detail</span>
+            </p>
+            <Link className="text-blue-400">View Profile</Link>
+          </div>
+          <Divider />
+          <div className="py-4">
+            <div className="flex space-x-4">
+              <Avatar
+                src={`${customer?.avtUrl}`}
+                alt="Customer Avt"
+                sx={{
+                  width: 50,
+                  height: 50,
+                  backgroundColor: [
+                    "orangered",
+                    "pink",
+                    "green",
+                    "blue",
+                    "cyan",
+                  ][Math.floor(Math.random() * 5)],
+                }}
+                variant="rounded"
+              >
+                {customer?.name.split(" ").at(-1)[0].toUpperCase()}
+              </Avatar>
+              <div>
+                <p className="text-[16px] font-medium">{customer.name}</p>
+                <p className="font-light text-slate-400">Customer</p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-4">
+              <p className="space-x-4">
+                <i className="fa-regular fa-envelope"></i>
+                <span>{customer.email}</span>
+              </p>
+              <p className="space-x-4">
+                <i className="fa-solid fa-phone"></i>
+                <span>{customer.phone}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-md bg-white px-4">
+          <div className="flex justify-between py-4">
+            <p className="space-x-2 font-medium">
+              <i className="fa-solid fa-location-dot"></i>
+              <span>Shipping Information</span>
+            </p>
+          </div>
+          <Divider />
+          <div className="py-4">
+            <p className="space-x-4">
+              <span className="font-medium">Receiver Name :</span>
+              <span>{order.receiverName}</span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">Receiver Phone :</span>
+              <span>{order.phoneNumber}</span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">Specific Address :</span>
+              <span>{specificAddress}</span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">Ward :</span>
+              <span>{ward}</span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">District :</span>
+              <span>{district}</span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">City :</span>
+              <span>{city}</span>
+            </p>
+          </div>
+        </div>
+        <div className="rounded-md bg-white px-4">
+          <div className="flex justify-between py-4">
+            <p className="space-x-2 font-medium">
+              <i className="fa-regular fa-credit-card"></i>
+              <span>Payment Detail</span>
+            </p>
+          </div>
+          <Divider />
+          <div className="py-4">
+            <div className="space-y-4">
+              <p className="space-x-4">
+                <span className="font-medium">Payment Method :</span>
+                <span>{order.paymentMethod.name}</span>
+              </p>
+              <p className="space-x-4">
+                <span className="font-medium">Payment Provider :</span>
+                <span>{order.paymentMethod.provider}</span>
+              </p>
+              <p className="space-x-4">
+                <span className="font-medium">Amount :</span>
+                <span>{formatNumber(order.total, "vn")} VND</span>
+              </p>
+              <div className="space-x-4">
+                <span className="font-medium">Payment Status :</span>
+                <span>
+                  <PaymentStatus value={order.paymentStatus} />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
+function PaymentStatus({ value }) {
+  const props = (value === "UNPAID" && {
+    color: "warning",
+    icon: <i className="fa-solid fa-sack-xmark"></i>,
+  }) ||
+    (value === "PROCESSING" && {
+      color: "info",
+      icon: <i className="fa-regular fa-clock"></i>,
+    }) ||
+    (value === "PAID" && {
+      color: "success",
+      icon: <i className="fa-solid fa-money-bill"></i>,
+    }) || { color: "error", icon: <i className="fa-solid fa-xmark"></i> };
+
+  return (
+    <Chip
+      label={`${value}`}
+      color={props.color}
+      className="w-[150px]"
+      icon={props.icon}
+      variant="outlined"
+    />
+  );
+}
 function getRowId(row) {
   return row.id;
 }
 
-function UpdateStatusForm() {
-  const { status, id } = useRouteLoaderData("orderDetails");
-  const [message, setMessage] = useState("");
-  const [newStatus, setNewStatus] = useState(status);
-
-  const renderOptions =
-    status !== "SUCCEEDED" && status !== "CANCEL"
-      ? valueOptions.slice(valueOptions.indexOf(status))
-      : [status];
-
-  return (
-    <Form className="flex items-center space-x-4" method="patch">
-      <p className="font-medium">Update Status</p>
-      <Select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
-        {renderOptions.map((s) => (
-          <MenuItem value={s} key={s}>
-            <OrderStatus status={s} />
-          </MenuItem>
-        ))}
-      </Select>
-      <input type="hidden" name="status" value={newStatus} />
-      <input type="hidden" name="message" value={message} />
-      {newStatus !== status && (
-        <>
-          <TextField
-            variant="standard"
-            label="Message"
-            onChange={(e) => setMessage(e.target.value)}
-            required={newStatus === "CANCEL"}
-          />
-          <button
-            name="type"
-            value="status"
-            className="rounded-md bg-main p-2 font-medium uppercase text-white"
-          >
-            Update
-          </button>
-        </>
-      )}
-    </Form>
-  );
-}
-
-function OrderStatus({ status }) {
-  const props = (status === "WAITING" && {
-    color: "warning",
-    icon: <i className="fa-regular fa-clock"></i>,
-  }) ||
-    (status === "APPROVED" && {
-      color: "info",
-      icon: <i className="fa-solid fa-check-double"></i>,
-    }) ||
-    (status === "SHIPPING" && {
-      color: "secondary",
-      icon: <i className="fa-solid fa-truck-fast"></i>,
-    }) ||
-    (status === "SUCCEEDED" && {
-      color: "success",
-      icon: <i className="fa-regular fa-circle-check"></i>,
-    }) || {
-      color: "error",
-      icon: <i className="fa-solid fa-ban"></i>,
-    };
-
-  return (
-    <Chip
-      label={`${status}`}
-      color={props.color}
-      className="w-[130px] space-x-1"
-      variant="outlined"
-      icon={props.icon}
-    />
-  );
-}
-
 export async function loader({ params: { id } }) {
-  const res = await fetchOrder(id);
-
-  if (res.error) throw res.error;
+  const res = {};
+  res.order = await fetchOrder(id);
+  res.customer = await fetchCustomerByEmail(res.order.email);
+  console.log(res.customer);
+  if (res.order.error || res.customer.error) new Response(res.error);
   return res;
 }
 
 export async function action({ request, params: { id } }) {
   const data = Object.fromEntries(await request.formData());
-  console.log(data);
   if (data.type === "status") {
-    // await updateOrderStatus(id, data.status);
+    await updateOrderStatus(id, data.status);
   }
   return null;
 }

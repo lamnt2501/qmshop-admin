@@ -108,3 +108,7 @@ a.active {
   color: white;
   border: none;
 }
+
+.MuiStepConnector-root.MuiStepConnector-vertical:first-child {
+  display: none;
+}

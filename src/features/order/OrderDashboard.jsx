@@ -216,31 +216,31 @@ function renderOrderStatusCell(value) {
   );
 }
 
-function RenderOrderStatusEditCell({
-  id,
-  value,
-  field,
-  colDef: { valueOptions },
-}) {
-  const apiRef = useGridApiContext();
-  const renderOptions =
-    value !== "SUCCEEDED" && value !== "CANCEL"
-      ? valueOptions.slice(valueOptions.indexOf(value))
-      : [value];
-  function handleChange(e) {
-    apiRef.current.setEditCellValue({ id, value: e.target.value, field });
-    apiRef.current.stopCellEditMode({ id, field });
-  }
-  return (
-    <Select defaultOpen={true} value={value} onChange={handleChange}>
-      {renderOptions.map((v, i) => (
-        <MenuItem value={v} disabled={value === v} key={v}>
-          {renderOrderStatusCell(v)}
-        </MenuItem>
-      ))}
-    </Select>
-  );
-}
+// function RenderOrderStatusEditCell({
+//   id,
+//   value,
+//   field,
+//   colDef: { valueOptions },
+// }) {
+//   const apiRef = useGridApiContext();
+//   const renderOptions =
+//     value !== "SUCCEEDED" && value !== "CANCEL"
+//       ? valueOptions.slice(valueOptions.indexOf(value))
+//       : [value];
+//   function handleChange(e) {
+//     apiRef.current.setEditCellValue({ id, value: e.target.value, field });
+//     apiRef.current.stopCellEditMode({ id, field });
+//   }
+//   return (
+//     <Select defaultOpen={true} value={value} onChange={handleChange}>
+//       {renderOptions.map((v, i) => (
+//         <MenuItem value={v} disabled={value === v} key={v}>
+//           {renderOrderStatusCell(v)}
+//         </MenuItem>
+//       ))}
+//     </Select>
+//   );
+// }
 
 export async function loader() {
   const res = await fetchOrders();
