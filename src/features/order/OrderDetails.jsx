@@ -29,7 +29,9 @@ const columns = [
     align: "left",
     field: "item",
     headerName: "Product Details",
+    // minWidth: 300,
     flex: 1,
+    resizable: false,
     headerAlign: "left",
 
     renderCell: (params) => {
@@ -97,7 +99,7 @@ function OrderDetails() {
   );
 
   return (
-    <div className="grid grid-cols-[70%_30%] space-x-4 rounded-md">
+    <div className="space-y-4 rounded-md lg:grid lg:grid-cols-[70%_30%] lg:space-x-4 lg:space-y-0">
       <div className="space-y-4">
         <div className="rounded-md bg-white">
           <div>
@@ -376,8 +378,9 @@ export async function loader({ params: { id } }) {
 
 export async function action({ request, params: { id } }) {
   const data = Object.fromEntries(await request.formData());
+
   if (data.type === "status") {
-    await updateOrderStatus(id, data.status);
+    await updateOrderStatus(id, data.status, data.message);
   }
   return null;
 }

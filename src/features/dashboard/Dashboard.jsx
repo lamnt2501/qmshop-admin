@@ -110,7 +110,7 @@ function Dashboard() {
           icon={<i className="fa-solid fa-exclamation"></i>}
         />
       </div>
-      <div className="space-x-4 lg:grid lg:grid-cols-[70%_30%]">
+      <div className="lg:grid lg:grid-cols-[70%_30%] lg:space-x-4">
         <div className="px rounded-md bg-white p-3">
           {/* <BarChart
             data={data}

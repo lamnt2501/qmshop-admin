@@ -10,7 +10,7 @@ function AppLayout() {
     <div>
       {isLoading && <Loader />}
       <SideBar />
-      <div className="ml-[84px] min-h-[100dvh] bg-gray-100 sm:ml-[200px]">
+      <div className="ml-[76px] min-h-[100dvh] bg-gray-100 sm:ml-[200px]">
         <div className="m-auto max-w-[1500px] px-4 py-4">
           <Header />
           <div className="mt-[46.9px] overflow-y-auto overflow-x-hidden">

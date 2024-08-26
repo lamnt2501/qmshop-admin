@@ -11,7 +11,7 @@ const labelMap = {
 export default function OrderStatusTrackingStep({ tracking, completed }) {
   const iconStyle = completed
     ? {
-        backgroundColor: tracking.status !== "CALCEL" ? "#68db7f" : "red",
+        backgroundColor: tracking.status !== "CANCEL" ? "#68db7f" : "#dc2626",
       }
     : {
         color: "#68db7f",
