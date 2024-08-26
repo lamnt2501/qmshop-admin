@@ -40,9 +40,7 @@ const getRankColor = (rank, type) => {
 export default function TopCustomerCard({
   className,
   level,
-
   type = "row",
-
   avtSize = 48,
   customer,
 }) {
@@ -118,9 +116,7 @@ export default function TopCustomerCard({
 TopCustomerCard.propTypes = {
   className: PropTypes.string,
   level: PropTypes.number,
-  crown: PropTypes.bool,
   type: PropTypes.string,
-  ring: PropTypes.string,
   avtSize: PropTypes.number,
   customer: PropTypes.object,
 };
