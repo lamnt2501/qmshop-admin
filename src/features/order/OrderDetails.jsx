@@ -67,6 +67,7 @@ const columns = [
     ...BASE_COL_DEF,
     field: "price",
     type: "number",
+    headerAlign: "center",
     headerName: "Product Price",
     renderCell: ({ value }) => renderCell(formatNumber(value, "vn") + " VND"),
   },
@@ -75,6 +76,7 @@ const columns = [
     ...BASE_COL_DEF,
     type: "number",
     field: "quantity",
+    headerAlign: "center",
     headerName: "Quantity",
     renderCell: ({ value }) => renderCell(value),
   },
@@ -82,6 +84,7 @@ const columns = [
     ...BASE_COL_DEF,
     type: "number",
     field: "total",
+    headerAlign: "center",
     headerName: "Total Amount",
     renderCell: ({ value }) => renderCell(formatNumber(value, "vn") + " VND"),
   },
@@ -91,8 +94,7 @@ const valueOptions = ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"];
 
 function OrderDetails() {
   const { order, customer } = useLoaderData();
-  const [specificAddress, ward, district, city] =
-    order?.address.split(", ") || [];
+  const { specificAddress, ward, district, city } = order.address;
   const subTotal = order.items.reduce(
     (pre, cur) => pre + cur.price * cur.quantity,
     0,

@@ -22,6 +22,13 @@ import OrderDetails, {
   action as orderDetailsAction,
   loader as orderDetailsLoader,
 } from "./features/order/OrderDetails";
+import ProductDashboard, {
+  loader as productLoader,
+} from "./features/product/ProductDashboard";
+import ProductDetails, {
+  action as productDetailsAction,
+  loader as productDetailsloader,
+} from "./features/product/ProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -57,22 +64,14 @@ const router = createBrowserRouter([
       },
       {
         path: "products",
-        element: <p>hi</p>,
-        children: [
-          { index: true, element: <p>hi</p> },
-          {
-            path: "new",
-            element: <Dashboard />,
-          },
-          {
-            path: "category",
-            element: <Dashboard />,
-          },
-          {
-            path: "size",
-            element: <Dashboard />,
-          },
-        ],
+        element: <ProductDashboard />,
+        loader: productLoader,
+      },
+      {
+        path: "products/:id",
+        element: <ProductDetails />,
+        loader: productDetailsloader,
+        action: productDetailsAction,
       },
       {
         path: "customers",

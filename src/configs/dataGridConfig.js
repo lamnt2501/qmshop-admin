@@ -1,5 +1,5 @@
 export const BASE_COL_DEF = {
-  headerAlign: "center",
-  align: "center",
-  minWidth: 150,
+  headerAlign: "left",
+  align: "left",
+  minWidth: 180,
 };
