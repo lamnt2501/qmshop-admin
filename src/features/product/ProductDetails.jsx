@@ -82,7 +82,7 @@ function ProductDetails() {
   useUnload(editModeOn);
 
   const html = product.description.replace(/(<? *script)/gi, "illegalscript");
-  console.log(product.options);
+
   function handlerReset() {
     setName(product.name);
     setCategoryId(
@@ -318,13 +318,13 @@ export async function action({ request, params: { id } }) {
   console.log(data);
   if (data.active) activeProductById(id, data.active);
   if (data.edit === "true") activeProductById(id, false);
-  // if (data.type === "update")
-  //   updateProductById(id, {
-  //     description: data.description,
-  //     brandId: data.brandId,
-  //     categoryId: data.categoryId,
-  //     name: data.name,
-  //   });
+  if (data.type === "update")
+    updateProductById(id, {
+      description: data.description,
+      brandId: data.brandId,
+      categoryId: JSON.parse(data.categoryId),
+      name: data.name,
+    });
   return null;
 }
 export default ProductDetails;

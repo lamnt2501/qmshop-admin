@@ -1,35 +1,20 @@
-import axios from "axios";
-import Cookies from "js-cookie";
-import { VITE_MANAGEMENT_API_URL } from "../configs/envConfig";
+import axiosFactory from "../configs/axiosConfig";
 
 async function getDashBoardData() {
-  const token = Cookies.get("accessToken");
-
-  const api = axios.create({
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const api = axiosFactory();
 
   try {
-    const orderSummary = (
-      await api.get(`${VITE_MANAGEMENT_API_URL}/orders/summary`)
-    ).data;
+    const orderSummary = (await api.get(`/orders/summary`)).data;
 
-    const paymentStatistic = (
-      await api.get(`${VITE_MANAGEMENT_API_URL}/payments/gateway-statistic`)
-    ).data;
+    const paymentStatistic = (await api.get(`/payments/gateway-statistic`))
+      .data;
 
-    const bestProducts = (
-      await api.get(`${VITE_MANAGEMENT_API_URL}/orders/product-best-seller`)
-    ).data;
+    const bestProducts = (await api.get(`/orders/product-best-seller`)).data;
 
-    const topCustomer = (
-      await api.get(`${VITE_MANAGEMENT_API_URL}/orders/top-customer`)
-    ).data;
+    const topCustomer = (await api.get(`/orders/top-customer`)).data;
 
     const revenue = (
-      await api.post(`${VITE_MANAGEMENT_API_URL}/payments/revenue`, {
+      await api.post(`/payments/revenue`, {
         type: "year",
         year: new Date().getFullYear(),
       })
@@ -47,16 +32,15 @@ async function getDashBoardData() {
   }
 }
 
-async function fetchBestProduct() {
+async function fetchOrderSummary() {
+  const api = axiosFactory();
+
   try {
-    const data = (await axios.get(`http://localhost:80/api/v1/products`)).data;
-    console.log(data);
-    return data;
-  } catch (err) {
-    return { error: err };
+    const orderSummary = (await api.get(`/orders/summary`)).data;
+    return orderSummary;
+  } catch (error) {
+    return { error };
   }
 }
 
-async function fetchRevenue() {}
-
-export { fetchBestProduct, fetchRevenue, getDashBoardData };
+export { getDashBoardData, fetchOrderSummary };

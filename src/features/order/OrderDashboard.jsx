@@ -2,12 +2,11 @@ import { Box, Chip } from "@mui/material";
 import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
-import { useEffect, useMemo } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchOrders } from "../../apis/orderApi";
-import { useDispatch } from "react-redux";
-import { dataLoaded } from "../../states/slices/orderSlice";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
+import { fetchOrderSummary } from "../../apis/dashboardApi";
 
 const columns = [
   {
@@ -107,60 +106,34 @@ const buildRows = (data) =>
 
 function OrderDashboard() {
   const apiRef = useGridApiRef();
-  const data = useLoaderData();
-  const dispatch = useDispatch();
+  const { orders, orderSummary } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  const paginationModel = useMemo(() => {
-    return { page: 0, pageSize: 10 };
-  }, []);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 20,
+  });
 
   const initialDataGridState = useMemo(() => {
     return {
       sorting: { sortModel: [{ field: "date", sort: "desc" }] },
     };
   }, []);
-
-  useEffect(() => {
-    if (data && !data?.error) dispatch(dataLoaded());
-  }, [data]);
-
+  console.log(orderSummary.totalOrder);
   return (
     <div className="space-y-4">
+      <div className=""></div>
       <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
         <DataGrid
           apiRef={apiRef}
-          rows={buildRows(data)}
+          rows={buildRows(orders)}
           columns={columns}
           disableColumnFilter
           density="comfortable"
           disableColumnSelector
           disableRowSelectionOnClick
           disableDensitySelector
-          paginationModel={paginationModel}
           initialState={initialDataGridState}
-          pageSizeOptions={[10, 20]}
-          // onCellClick={(params) => {
-          //   if (params.colDef.editable && params.cellMode === "view")
-          //     apiRef.current.startCellEditMode({
-          //       id: params.id,
-          //       field: params.field,
-          //     });
-          // }}
-          // processRowUpdate={async (newRow, oldRow) => {
-          //   if (newRow.status === oldRow.status) return oldRow;
-          //   const res = await updateOrderStatus(newRow.id, newRow.status);
-          //   setSnackBarSate((s) => {
-          //     return { ...s, open: true, content: "Order Update Success!" };
-          //   });
-          //   if (res.error) throw new Error(res.error.response?.data?.message);
-          //   return newRow;
-          // }}
-          // onProcessRowUpdateError={(err) => {
-          //   setSnackBarSate((s) => {
-          //     return { ...s, open: true, content: err.message };
-          //   });
-          // }}
           onRowClick={({ row: { id } }) => navigate(`/orders/${id}`)}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
@@ -172,6 +145,19 @@ function OrderDashboard() {
             "& .MuiDataGrid-row:hover": {
               cursor: "pointer",
             },
+          }}
+          rowCount={orderSummary.totalOrder}
+          onRowCountChange={(rc) => apiRef.current.setRowCount(rc)}
+          pageSizeOptions={[10, 20, 30, 50, 100]}
+          paginationModel={paginationModel}
+          paginationMode="server"
+          onPaginationModelChange={(params) => {
+            setPaginationModel(params);
+            setSearchParams((s) => {
+              s.set("page", params.page + 1);
+              s.set("limit", params.pageSize);
+              return s;
+            });
           }}
         />
       </Box>
@@ -237,10 +223,13 @@ function renderOrderStatusCell(value) {
 //   );
 // }
 
-export async function loader() {
-  const res = await fetchOrders();
-  if (res.error) throw res.error;
-  return res;
+export async function loader({ request }) {
+  const orders = await fetchOrders(request.url.split("?")[1]);
+  const orderSummary = await fetchOrderSummary();
+
+  if (orders.error || orderSummary.error)
+    throw new Response("Some thing went wrong!", { status: 400 });
+  return { orders, orderSummary };
 }
 
 export default OrderDashboard;
