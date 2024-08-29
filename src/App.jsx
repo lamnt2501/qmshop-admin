@@ -29,6 +29,7 @@ import ProductDetails, {
   action as productDetailsAction,
   loader as productDetailsloader,
 } from "./features/product/ProductDetails";
+import NewProduct from "./features/product/NewProduct";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
         element: <ProductDetails />,
         loader: productDetailsloader,
         action: productDetailsAction,
+      },
+      {
+        path: "products/new",
+        element: <NewProduct />,
       },
       {
         path: "customers",

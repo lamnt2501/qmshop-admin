@@ -8,6 +8,7 @@ import { formatNumber } from "../../utils/utils";
 import UpdateStatusForm from "./UpdateStatusForm";
 import OrderStatusTrackingStep from "./OrderStatusTrackingstep";
 import { fetchCustomerByEmail } from "../../apis/customerApi";
+import useTitle from "../../hooks/useTitle";
 const buildRows = (items) =>
   items?.map((item) => {
     return {
@@ -99,7 +100,7 @@ function OrderDetails() {
     (pre, cur) => pre + cur.price * cur.quantity,
     0,
   );
-
+  useTitle("Order Details");
   return (
     <div className="space-y-4 rounded-md lg:grid lg:grid-cols-[70%_30%] lg:space-x-4 lg:space-y-0">
       <div className="space-y-4">

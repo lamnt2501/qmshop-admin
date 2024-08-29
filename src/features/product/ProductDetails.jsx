@@ -22,6 +22,7 @@ import { fetchCategories } from "../../apis/categoryApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { DataGrid } from "@mui/x-data-grid";
 import formatNumber from "../../utils/formatNumber";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -80,6 +81,7 @@ function ProductDetails() {
 
   const [editModeOn, setEditModeOn] = useState(false);
   useUnload(editModeOn);
+  useTitle(product.name);
 
   const html = product.description.replace(/(<? *script)/gi, "illegalscript");
 
@@ -297,7 +299,7 @@ function ProductDetails() {
           </div>
         </div>
 
-        <div className="rounded-md bg-white p-4">123</div>
+        {/* <div className="rounded-md bg-white p-4">{ratings.map(() => {})}</div> */}
       </div>
     </div>
   );
@@ -317,7 +319,7 @@ export async function action({ request, params: { id } }) {
   const data = Object.fromEntries(await request.formData());
   console.log(data);
   if (data.active) activeProductById(id, data.active);
-  if (data.edit === "true") activeProductById(id, false);
+  if (data.edit) activeProductById(id, false);
   if (data.type === "update")
     updateProductById(id, {
       description: data.description,

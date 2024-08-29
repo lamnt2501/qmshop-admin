@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { dataLoaded } from "../../states/slices/dashboardSlice";
 import { formatNumber } from "../../utils/utils";
 import LineChart from "../../ui/chart/LineChart";
+import useTitle from "../../hooks/useTitle";
 
 function revenueChartData(revenue, type) {
   console.log(type);
@@ -57,7 +58,7 @@ function Dashboard() {
   useEffect(() => {
     if (!error) dispatch(dataLoaded(loaderData));
   }, [loaderData]);
-
+  useTitle("Dashboard");
   return (
     <div className="space-y-4">
       <div className="grid gap-4 rounded-md bg-white p-3 sm:grid-cols-2 lg:grid-cols-4">

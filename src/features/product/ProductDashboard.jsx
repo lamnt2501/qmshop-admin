@@ -5,6 +5,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { fetchProducts } from "../../apis/productApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { formatDate } from "../../utils/utils";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -96,6 +97,7 @@ function getRowId(row) {
 function ProductDashboard() {
   const { products } = useLoaderData();
   const navigate = useNavigate();
+  useTitle("Product Dashboard");
   return (
     <Box width="100%" height="500px" sx={{ backgroundColor: "white" }}>
       <DataGrid

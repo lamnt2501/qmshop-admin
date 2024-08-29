@@ -64,32 +64,16 @@ function SideBar() {
           icon={<i className="fa-solid fa-store"></i>}
           title="Product"
         >
-          {/* <ul className="ml-2 mt-2 space-y-1 transition-all">
+          <ul className="ml-2 mt-2 space-y-1 transition-all">
             <div className="border-l-2 border-purple-500 px-2">
               <NavItem
-                to="/orders/:id"
+                to="/products/new"
                 size="sm"
                 title="New Product"
-                icon={<i className="fa-solid fa-truck-fast"></i>}
+                icon={<i className="fa-solid fa-plus"></i>}
               />
             </div>
-            <div className="border-l-2 border-purple-500 px-2">
-              <NavItem
-                to="/products/category"
-                size="sm"
-                title="Category"
-                icon={<i className="fa-solid fa-truck-fast"></i>}
-              />
-            </div>
-            <div className="border-l-2 border-purple-500 px-2">
-              <NavItem
-                to="/products/size"
-                size="sm"
-                title="Size"
-                icon={<i className="fa-solid fa-truck-fast"></i>}
-              />
-            </div>
-          </ul> */}
+          </ul>
         </NavItem>
 
         <NavItem

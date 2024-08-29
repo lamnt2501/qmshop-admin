@@ -7,6 +7,7 @@ import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchOrders } from "../../apis/orderApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { fetchOrderSummary } from "../../apis/dashboardApi";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -119,7 +120,9 @@ function OrderDashboard() {
       sorting: { sortModel: [{ field: "date", sort: "desc" }] },
     };
   }, []);
-  console.log(orderSummary.totalOrder);
+
+  useTitle("Order Dashboard");
+
   return (
     <div className="space-y-4">
       <div className=""></div>
