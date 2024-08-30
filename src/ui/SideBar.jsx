@@ -96,16 +96,6 @@ const NavItem = memo(
   function NavItem({ children, to, icon, title, size }) {
     const [open, setOpen] = useState(false);
 
-    // const { pathname } = useLocation();
-    // useEffect(() => {
-    //   if (
-    //     to.startsWith("/" + title.toLowerCase()) !==
-    //     pathname.startsWith("/" + title.toLowerCase())
-    //   ) {
-    //     setOpen(false);
-    //   } else setOpen(true);
-    // }, [to, pathname]);
-
     return (
       <li>
         <NavLink
@@ -118,13 +108,13 @@ const NavItem = memo(
             <span className="hidden sm:block">{title}</span>
           </p>
           {children && (
-            <span className="float-right">
+            <p className="float-right pl-4" onClick={(e) => e.preventDefault()}>
               {!open ? (
                 <i className="fa-solid fa-chevron-right"></i>
               ) : (
                 <i className="fa-solid fa-chevron-down"></i>
               )}
-            </span>
+            </p>
           )}
         </NavLink>
         {open && children}
