@@ -37,3 +37,12 @@ export async function activeProductById(id, active) {
     return { error };
   }
 }
+
+export async function createProduct(product) {
+  const api = axiosFactory();
+  try {
+    return (await api.post("/products", product)).data;
+  } catch (error) {
+    return { error };
+  }
+}

@@ -86,8 +86,7 @@ const buildRows = (products) =>
     id: p.id,
     date: new Date(p.createdAt),
     brand: p.brand,
-    rating: Math.floor(Math.random() * 6),
-    // p.avgRatings,
+    rating: p.avgRatings,
     category: p.categories,
   }));
 function getRowId(row) {

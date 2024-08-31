@@ -94,7 +94,7 @@ function SideBar() {
 
 const NavItem = memo(
   function NavItem({ children, to, icon, title, size }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
 
     return (
       <li>
@@ -128,8 +128,8 @@ const NavItem = memo(
 
 NavItem.propTypes = {
   to: PropTypes.string,
-  size: PropTypes.number,
-  children: PropTypes.func,
+  size: PropTypes.string,
+  children: PropTypes.any,
   icon: PropTypes.object,
   title: PropTypes.any,
 };

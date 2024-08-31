@@ -56,7 +56,7 @@ function LoginPage() {
               name="password"
               id="password"
               required
-              defaultValue="admin"
+              defaultValue="12345678"
               className="w-full px-2 py-2"
             />
             <button className="max-w-[50%] rounded-md border bg-cyan-400 px-4 py-2 uppercase text-white transition-all hover:bg-cyan-300 focus:outline-none focus:ring focus:ring-cyan-400 active:scale-95">
