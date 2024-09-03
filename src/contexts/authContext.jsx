@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import Cookies from "js-cookie";
+import PropTypes from "prop-types";
 const AuthContext = createContext();
 
 const initialState = {
@@ -44,6 +45,10 @@ function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.any,
+};
 
 function useAuthContext() {
   const data = useContext(AuthContext);

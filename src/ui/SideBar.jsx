@@ -73,6 +73,38 @@ function SideBar() {
                 icon={<i className="fa-solid fa-plus"></i>}
               />
             </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/sizes"
+                size="sm"
+                title="Size"
+                icon={<i className="fa-solid fa-s"></i>}
+              />
+            </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/colors"
+                size="sm"
+                title="Color"
+                icon={<i className="fa-solid fa-palette"></i>}
+              />
+            </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/brands"
+                size="sm"
+                title="Brand"
+                icon={<i className="fa-solid fa-b"></i>}
+              />
+            </div>
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/products/categories"
+                size="sm"
+                title="Category"
+                icon={<i className="fa-solid fa-c"></i>}
+              />
+            </div>
           </ul>
         </NavItem>
 

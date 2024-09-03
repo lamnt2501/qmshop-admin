@@ -33,6 +33,13 @@ import NewProduct, {
   action as newProductAction,
   loader as newProductLoader,
 } from "./features/product/NewProduct";
+import SizeDashboard, {
+  loader as sizeLoader,
+  action as sizeAction,
+} from "./features/product/SizeDashboard";
+import ColorDasboard from "./features/product/ColorDasboard";
+import BrandDashboard from "./features/product/BrandDashboard";
+import CategoryDashboard from "./features/product/CategoryDashboard";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +89,24 @@ const router = createBrowserRouter([
         element: <NewProduct />,
         loader: newProductLoader,
         action: newProductAction,
+      },
+      {
+        path: "products/sizes",
+        element: <SizeDashboard />,
+        loader: sizeLoader,
+        action: sizeAction,
+      },
+      {
+        path: "products/colors",
+        element: <ColorDasboard />,
+      },
+      {
+        path: "products/brands",
+        element: <BrandDashboard />,
+      },
+      {
+        path: "products/categories",
+        element: <CategoryDashboard />,
       },
       {
         path: "customers",
