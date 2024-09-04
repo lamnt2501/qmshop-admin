@@ -41,7 +41,10 @@ import ColorDasboard, {
   action as colorAction,
   loader as colorLoader,
 } from "./features/product/ColorDasboard";
-import BrandDashboard from "./features/product/BrandDashboard";
+import BrandDashboard, {
+  // action as brandAction,
+  loader as brandLoader,
+} from "./features/product/BrandDashboard";
 import CategoryDashboard from "./features/product/CategoryDashboard";
 
 const router = createBrowserRouter([
@@ -108,6 +111,8 @@ const router = createBrowserRouter([
       {
         path: "products/brands",
         element: <BrandDashboard />,
+        loader: brandLoader,
+        // action: brandAction,
       },
       {
         path: "products/categories",
