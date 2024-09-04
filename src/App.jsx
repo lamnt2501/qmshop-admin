@@ -37,7 +37,10 @@ import SizeDashboard, {
   loader as sizeLoader,
   action as sizeAction,
 } from "./features/product/SizeDashboard";
-import ColorDasboard from "./features/product/ColorDasboard";
+import ColorDasboard, {
+  action as colorAction,
+  loader as colorLoader,
+} from "./features/product/ColorDasboard";
 import BrandDashboard from "./features/product/BrandDashboard";
 import CategoryDashboard from "./features/product/CategoryDashboard";
 
@@ -99,6 +102,8 @@ const router = createBrowserRouter([
       {
         path: "products/colors",
         element: <ColorDasboard />,
+        loader: colorLoader,
+        action: colorAction,
       },
       {
         path: "products/brands",

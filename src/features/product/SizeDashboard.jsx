@@ -63,7 +63,7 @@ function SizeDashboard() {
           <DialogTitle>New Size</DialogTitle>
           <DialogContent>
             <Form className="space-y-4" method="post">
-              <TextField name="size" label="Size" fullWidth />
+              <TextField name="size" label="Size" fullWidth required />
               <TextField name="description" label="Description" fullWidth />
               <div className="space-x-4">
                 <button
