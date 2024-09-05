@@ -8,3 +8,17 @@ export async function fetchCategories() {
     return { error };
   }
 }
+
+export async function categoryApi(method, url, data, config) {
+  const api = axiosFactory();
+  try {
+    switch (method) {
+      case "get":
+        return await api.get(url, config);
+      case "post":
+        return await api.post(url, data, config);
+    }
+  } catch (error) {
+    return { error };
+  }
+}

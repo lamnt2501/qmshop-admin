@@ -45,7 +45,10 @@ import BrandDashboard, {
   // action as brandAction,
   loader as brandLoader,
 } from "./features/product/BrandDashboard";
-import CategoryDashboard from "./features/product/CategoryDashboard";
+import CategoryDashboard, {
+  action as categoryAction,
+  loader as categoryLoader,
+} from "./features/product/CategoryDashboard";
 
 const router = createBrowserRouter([
   {
@@ -117,6 +120,8 @@ const router = createBrowserRouter([
       {
         path: "products/categories",
         element: <CategoryDashboard />,
+        loader: categoryLoader,
+        action: categoryAction,
       },
       {
         path: "customers",
