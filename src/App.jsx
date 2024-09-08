@@ -49,6 +49,9 @@ import CategoryDashboard, {
   action as categoryAction,
   loader as categoryLoader,
 } from "./features/product/CategoryDashboard";
+import CustomerDashboard, {
+  loader as customerLoader,
+} from "./features/user/CustomerDashboard";
 
 const router = createBrowserRouter([
   {
@@ -125,7 +128,8 @@ const router = createBrowserRouter([
       },
       {
         path: "customers",
-        element: <Dashboard />,
+        element: <CustomerDashboard />,
+        loader: customerLoader,
       },
       {
         path: "discounts",

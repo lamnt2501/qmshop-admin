@@ -1,5 +1,14 @@
 import axiosFactory from "../configs/axiosConfig";
 
+export async function fetchCustomers(params) {
+  const api = axiosFactory();
+  try {
+    return (await api.get(`/users${params ? "?" + params : ""}`)).data;
+  } catch (error) {
+    return { error };
+  }
+}
+
 export async function fetchCustomerById(id) {
   const api = axiosFactory();
   try {
