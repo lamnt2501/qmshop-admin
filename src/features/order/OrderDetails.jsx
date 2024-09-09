@@ -226,7 +226,9 @@ function OrderDetails() {
               <i className="fa-regular fa-user"></i>
               <span>Customer Detail</span>
             </p>
-            <Link className="text-blue-400">View Profile</Link>
+            <Link className="text-blue-400" to={`/customers/${customer.id}`}>
+              View Profile
+            </Link>
           </div>
           <Divider />
           <div className="py-4">

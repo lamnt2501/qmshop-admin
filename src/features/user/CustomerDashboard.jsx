@@ -2,7 +2,7 @@ import { Avatar, Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchCustomers } from "../../apis/customerApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -61,7 +61,7 @@ const buildRows = (customers) =>
 
 function CustomerDashboard() {
   const { customers } = useLoaderData();
-
+  const naviagte = useNavigate();
   return (
     <div>
       <Box
@@ -71,7 +71,11 @@ function CustomerDashboard() {
           backgroundColor: "white",
         }}
       >
-        <DataGrid columns={columns} rows={buildRows(customers)} />
+        <DataGrid
+          columns={columns}
+          rows={buildRows(customers)}
+          onRowClick={(params) => naviagte(`/customers/${params.id}`)}
+        />
       </Box>
     </div>
   );

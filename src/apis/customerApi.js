@@ -28,3 +28,13 @@ export async function fetchCustomerByEmail(email) {
     return { error };
   }
 }
+
+export async function fetchTopCustomerById(id) {
+  const api = axiosFactory();
+
+  try {
+    return (await api.get(`/users/${id}/memberShip`)).data;
+  } catch (error) {
+    return { error };
+  }
+}
