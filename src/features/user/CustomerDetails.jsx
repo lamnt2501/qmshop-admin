@@ -8,6 +8,7 @@ import { Avatar } from "@mui/material";
 import { formatDate, formatNumber } from "../../utils/utils";
 import { fetchOrderByCustomerId } from "../../apis/orderApi";
 import OrderStatus from "../order/OrderStatus";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -51,7 +52,7 @@ const buildRows = (orders) =>
 function CustomerDetails() {
   const { customer, memberShip, orders } = useLoaderData();
   const navigate = useNavigate();
-  console.log(customer, memberShip, orders);
+  useTitle("Customer Details - " + customer.name);
   return (
     <div className="grid grid-cols-2 space-x-4">
       <div className="space-y-4">

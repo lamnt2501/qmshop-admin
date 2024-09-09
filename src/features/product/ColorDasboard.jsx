@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { DataGrid, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
 import { useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -69,6 +70,7 @@ const buildRows = (colors) =>
   }));
 
 function ColorDasboard() {
+  useTitle("Color Dashborad");
   const apiRef = useGridApiRef();
   const { colors } = useLoaderData();
   const [open, setOpen] = useState(false);

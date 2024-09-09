@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -46,7 +47,7 @@ function SizeDashboard() {
   const { sizes } = useLoaderData();
   const apiRef = useGridApiRef();
   const [open, setOpen] = useState(false);
-
+  useTitle("Size Dashboard");
   function handleClose() {
     setOpen(false);
   }

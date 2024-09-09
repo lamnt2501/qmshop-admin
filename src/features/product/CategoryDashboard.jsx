@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -52,6 +53,7 @@ const buildRows = (categories) =>
 function CategoryDashboard() {
   const { categories } = useLoaderData();
   const [open, setOpen] = useState(false);
+  useTitle("Category Dashboard");
   return (
     <div className="space-y-4">
       <div>

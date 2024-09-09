@@ -12,6 +12,7 @@ import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -61,6 +62,7 @@ const buildRows = (brands) =>
   }));
 
 function BrandDashboard() {
+  useTitle("Brand Dashboard");
   const { brands } = useLoaderData();
   const [updateArgs, setUpdateArgs] = useState(null);
   const navigate = useNavigate();
@@ -200,7 +202,6 @@ function EditCell({ params }) {
   const { value, id, field } = params;
   const [img, setImg] = useState(value);
   const apiRef = useGridApiContext();
-
   return (
     <div className="flex">
       <input

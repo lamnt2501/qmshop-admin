@@ -317,7 +317,6 @@ export async function loader({ params: { id } }) {
 
 export async function action({ request, params: { id } }) {
   const data = Object.fromEntries(await request.formData());
-  console.log(data);
   if (data.active) activeProductById(id, data.active);
   if (data.edit) activeProductById(id, false);
   if (data.type === "update")
