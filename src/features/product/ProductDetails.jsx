@@ -2,28 +2,30 @@ import { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Form, useLoaderData } from "react-router-dom";
 import {
+  Avatar,
   Chip,
   MenuItem,
   Paper,
+  Rating,
   Select,
   Switch,
   TextField,
 } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   activeProductById,
   fetchProductyId,
   updateProductById,
 } from "../../apis/productApi";
+import PropTypes from "prop-types";
 import { fetchRatingsByProductId } from "../../apis/ratingApi";
 import { VITE_TINY_MCE_API_KEY } from "../../configs/envConfig";
 import useUnload from "../../hooks/useUnload";
 import { fetchBrands } from "../../apis/brandApi";
 import { fetchCategories } from "../../apis/categoryApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
-import { DataGrid } from "@mui/x-data-grid";
 import formatNumber from "../../utils/formatNumber";
 import useTitle from "../../hooks/useTitle";
-
 const columns = [
   {
     ...BASE_COL_DEF,
@@ -104,7 +106,7 @@ function ProductDetails() {
 
     setEditModeOn((o) => !o);
   }
-
+  console.log(ratings);
   return (
     <div>
       <div className="space-y-4 lg:grid lg:grid-cols-[60%_40%] lg:space-x-4 lg:space-y-0">
@@ -299,11 +301,49 @@ function ProductDetails() {
           </div>
         </div>
 
-        {/* <div className="rounded-md bg-white p-4">{ratings.map(() => {})}</div> */}
+        <div className="rounded-md bg-white p-4">
+          <h1 className="text-lg font-medium">Ratings</h1>
+          <div className="max-h-[1000px] space-y-4 overflow-y-scroll">
+            {ratings.map((r) => (
+              <>
+                <RatingComment key={r.id} rating={r} />
+                <hr />
+              </>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
+function RatingComment({ rating }) {
+  return (
+    <div>
+      <div className="flex space-x-4">
+        <div>
+          <Avatar
+            src={
+              rating.avtUrl ||
+              "https://scontent.fhan5-2.fna.fbcdn.net/v/t1.6435-9/79688722_568320937296602_7578883004005613568_n.jpg?stp=dst-jpg_s600x600&_nc_cat=102&ccb=1-7&_nc_sid=f727a1&_nc_ohc=1vOlnmdOK5UQ7kNvgHWZYst&_nc_ht=scontent.fhan5-2.fna&oh=00_AYAi-QJbxcktfvAK4TpQRxS9Jf53Hipipu1gu__RjwJ-dw&oe=6707943C"
+            }
+          >
+            {rating.by.split(" ").at(-1)[0]}
+          </Avatar>
+        </div>
+        <div>
+          <p>{rating.by}</p>
+          <Rating value={rating.rating} readOnly />
+          <p className="mt-2">{rating.comment}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+RatingComment.propTypes = {
+  rating: PropTypes.object,
+};
 
 export async function loader({ params: { id } }) {
   const product = await fetchProductyId(id);

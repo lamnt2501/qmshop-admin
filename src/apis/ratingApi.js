@@ -3,7 +3,7 @@ import axiosFactory from "../configs/axiosConfig";
 export async function fetchRatingsByProductId(id) {
   const api = axiosFactory();
   try {
-    await api.get(`/ratings/product/${id}`);
+    return (await api.get(`/ratings/product/${id}`)).data;
   } catch (error) {
     return { error };
   }
