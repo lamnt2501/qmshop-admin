@@ -1,11 +1,6 @@
 import { Avatar, Box, Chip, Rating } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  useLoaderData,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 
 import { fetchProducts } from "../../apis/productApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";

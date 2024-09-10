@@ -82,6 +82,25 @@ function CustomerDetails() {
               <span className="font-medium">Phone:</span>
               <span>{customer.phone}</span>
             </p>
+            <p className="space-x-4">
+              <span className="font-medium">Gender:</span>
+              {/* <span>{customer.gender}</span> */}
+              <span
+                className={`${customer.gender === "MALE" ? "text-blue-600" : "text-pink-500"}`}
+              >
+                <i
+                  className={`fa-solid fa-${customer.gender === "MALE" ? "mars" : "venus"}`}
+                ></i>
+              </span>
+            </p>
+            <p className="space-x-4">
+              <span className="font-medium">Birthday:</span>
+              <span>
+                {formatDate(new Date(customer.birthday), {
+                  dateStyle: "long",
+                })}
+              </span>
+            </p>
           </div>
         </div>
         <div className="rounded-md bg-white p-4">
