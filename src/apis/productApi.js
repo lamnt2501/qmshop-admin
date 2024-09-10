@@ -1,9 +1,9 @@
 import axiosFactory from "../configs/axiosConfig";
 
-export async function fetchProducts() {
+export async function fetchProducts(params) {
   const api = axiosFactory();
   try {
-    return (await api.get("/products")).data;
+    return (await api.get(`/products${params ? "?" + params : ""}`)).data;
   } catch (error) {
     return { error };
   }

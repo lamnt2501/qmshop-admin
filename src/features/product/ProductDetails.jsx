@@ -179,7 +179,7 @@ function ProductDetails() {
                     onInit={(_evt, editor) => (editorRef.current = editor)}
                     init={{
                       plugins:
-                        "anchor autolink autoresize charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown",
+                        "anchor autolink autoresize charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
                       toolbar:
                         "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
                       tinycomments_mode: "embedded",
@@ -301,7 +301,7 @@ function ProductDetails() {
           </div>
         </div>
 
-        <div className="rounded-md bg-white p-4">
+        <div className="top-62 sticky rounded-md bg-white p-4">
           <h1 className="text-lg font-medium">Ratings</h1>
           <div className="max-h-[1000px] space-y-4 overflow-y-scroll">
             {ratings.map((r) => (

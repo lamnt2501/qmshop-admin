@@ -1,11 +1,17 @@
 import { Avatar, Box, Chip, Rating } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import {
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import { fetchProducts } from "../../apis/productApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { formatDate } from "../../utils/utils";
 import useTitle from "../../hooks/useTitle";
+import { useState } from "react";
 
 const columns = [
   {
@@ -96,7 +102,12 @@ function getRowId(row) {
 function ProductDashboard() {
   const { products } = useLoaderData();
   const navigate = useNavigate();
+  const [pagingModel, setPagingModel] = useState({
+    page: 0,
+    pageSize: 20,
+  });
   useTitle("Product Dashboard");
+  const [params, setParams] = useSearchParams();
   return (
     <Box width="100%" height="500px" sx={{ backgroundColor: "white" }}>
       <DataGrid
@@ -104,7 +115,6 @@ function ProductDashboard() {
         density="comfortable"
         rows={buildRows(products)}
         getRowId={getRowId}
-        hideFooter
         disableColumnSelector
         columnVisibilityModel={{
           id: false,
@@ -117,14 +127,23 @@ function ProductDashboard() {
         onRowClick={({ id }) => {
           navigate(`/products/${id}`);
         }}
+        pageSizeOptions={[20, 50, 100]}
+        rowCount={101}
+        paginationModel={pagingModel}
+        paginationMode="server"
+        onPaginationModelChange={(model) => {
+          setPagingModel(model);
+          params.set("page", model.page + 1);
+          params.set("limit", model.pageSize);
+          setParams(params);
+        }}
       />
     </Box>
   );
 }
 
-export async function loader() {
-  const products = await fetchProducts();
-  console.log(products[0]);
+export async function loader({ request }) {
+  const products = await fetchProducts(request.url.split("?")[1]);
   if (products.error) throw new Response(products.error, { status: 400 });
   return { products };
 }
