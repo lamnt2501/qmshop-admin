@@ -132,7 +132,6 @@ const NavItem = memo(
       <li>
         <NavLink
           to={to}
-          onClick={() => setOpen(!open)}
           className={`flex w-full justify-center rounded-md px-3 py-2 text-stone-700 transition-colors hover:ring-1 hover:ring-main sm:justify-between`}
         >
           <p className={`flex items-center space-x-2 text-${size || "base"}`}>
@@ -140,7 +139,13 @@ const NavItem = memo(
             <span className="hidden sm:block">{title}</span>
           </p>
           {children && (
-            <p className="float-right pl-4" onClick={(e) => e.preventDefault()}>
+            <p
+              className="float-right pl-4"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen((o) => !o);
+              }}
+            >
               {!open ? (
                 <i className="fa-solid fa-chevron-right"></i>
               ) : (

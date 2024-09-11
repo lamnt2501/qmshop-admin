@@ -51,10 +51,10 @@ import CategoryDashboard, {
 } from "./features/product/CategoryDashboard";
 import CustomerDashboard, {
   loader as customerLoader,
-} from "./features/user/CustomerDashboard";
+} from "./features/customer/CustomerDashboard";
 import CustomerDetails, {
   loader as customerDetailsLoader,
-} from "./features/user/CustomerDetails";
+} from "./features/customer/CustomerDetails";
 
 const router = createBrowserRouter([
   {

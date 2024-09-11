@@ -301,9 +301,9 @@ function ProductDetails() {
           </div>
         </div>
 
-        <div className="top-62 sticky rounded-md bg-white p-4">
-          <h1 className="text-lg font-medium">Ratings</h1>
-          <div className="max-h-[1000px] space-y-4 overflow-y-scroll">
+        <div className="top-62 sticky rounded-md">
+          <h1 className="bg-white p-4 text-lg font-medium">Ratings</h1>
+          <div className="max-h-[1000px] space-y-4 overflow-y-scroll bg-white p-4">
             {ratings.map((r) => (
               <>
                 <RatingComment key={r.id} rating={r} />
