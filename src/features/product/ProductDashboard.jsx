@@ -132,6 +132,11 @@ function ProductDashboard() {
           params.set("limit", model.pageSize);
           setParams(params);
         }}
+        sx={{
+          "& .MuiDataGrid-row:hover": {
+            cursor: "pointer",
+          },
+        }}
       />
     </Box>
   );

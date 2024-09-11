@@ -2,7 +2,8 @@ import { Avatar, Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchCustomers } from "../../apis/customerApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 const columns = [
   {
@@ -62,6 +63,11 @@ const buildRows = (customers) =>
 function CustomerDashboard() {
   const { customers } = useLoaderData();
   const naviagte = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: 1,
+    limit: 20,
+  });
+  const [pagingModel, setPagingModel] = useState({ page: 0, pageSize: 20 });
   return (
     <div>
       <Box
@@ -74,6 +80,23 @@ function CustomerDashboard() {
         <DataGrid
           columns={columns}
           rows={buildRows(customers)}
+          sx={{
+            "& .MuiDataGrid-row:hover": {
+              cursor: "pointer",
+            },
+          }}
+          rowCount={100}
+          pageSizeOptions={[20, 50, 100]}
+          paginationMode="server"
+          paginationModel={pagingModel}
+          onPaginationModelChange={(model) => {
+            setPagingModel(model);
+            setSearchParams((m) => ({
+              ...m,
+              page: model.page + 1,
+              limit: model.pageSize,
+            }));
+          }}
           onRowClick={(params) => naviagte(`/customers/${params.id}`)}
         />
       </Box>
@@ -81,8 +104,8 @@ function CustomerDashboard() {
   );
 }
 
-export async function loader() {
-  const customers = await fetchCustomers();
+export async function loader({ request }) {
+  const customers = await fetchCustomers(request.url.split("?")[1]);
 
   if (customers.error) throw new Response(customers.error.message);
   return { customers };
