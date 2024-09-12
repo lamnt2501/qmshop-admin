@@ -26,7 +26,7 @@ function reducer(state, action) {
 
 function setToken(token) {
   Cookies.set("accessToken", token, {
-    expires: new Date(Date.now() + 60 * 1000 * 60),
+    expires: new Date(Date.now() + 60 * 1000 * 24 * 60),
   });
   return { type: "auth/setToken", payload: token };
 }

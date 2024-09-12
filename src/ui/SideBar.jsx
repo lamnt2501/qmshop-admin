@@ -118,7 +118,18 @@ function SideBar() {
           to="/discounts"
           icon={<i className="fa-solid fa-gift"></i>}
           title="Discount"
-        />
+        >
+          <ul className="ml-2 mt-2 space-y-1 transition-all">
+            <div className="border-l-2 border-purple-500 px-2">
+              <NavItem
+                to="/discounts/new"
+                size="sm"
+                title="New Discount"
+                icon={<i className="fa-solid fa-plus"></i>}
+              />
+            </div>
+          </ul>
+        </NavItem>
       </ul>
     </div>
   );

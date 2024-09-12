@@ -4,6 +4,7 @@ import { fetchCustomers } from "../../apis/customerApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const columns = [
   {
@@ -61,6 +62,7 @@ const buildRows = (customers) =>
   }));
 
 function CustomerDashboard() {
+  useTitle("Customer Dashboard");
   const { customers } = useLoaderData();
   const naviagte = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams({

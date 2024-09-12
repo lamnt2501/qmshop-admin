@@ -55,6 +55,13 @@ import CustomerDashboard, {
 import CustomerDetails, {
   loader as customerDetailsLoader,
 } from "./features/customer/CustomerDetails";
+import DiscountDasboard, {
+  loader as discountLoader,
+} from "./features/discount/DiscountDasboard";
+import NewDiscount, {
+  action as newDiscountAction,
+  loader as newDiscountLoader,
+} from "./features/discount/NewDiscount";
 
 const router = createBrowserRouter([
   {
@@ -141,7 +148,14 @@ const router = createBrowserRouter([
       },
       {
         path: "discounts",
-        element: <Dashboard />,
+        element: <DiscountDasboard />,
+        loader: discountLoader,
+      },
+      {
+        path: "discounts/new",
+        element: <NewDiscount />,
+        loader: newDiscountLoader,
+        action: newDiscountAction,
       },
     ],
   },
