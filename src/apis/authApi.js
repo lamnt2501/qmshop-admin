@@ -1,5 +1,6 @@
 import axios from "axios";
-import { VITE_AUTH_API_URL } from "../configs/envConfig";
+import { VITE_AUTH_API_URL, VITE_PUBLIC_API_URL } from "../configs/envConfig";
+import axiosFactory from "../configs/axiosConfig";
 
 export async function login(email, password) {
   const res = {};
@@ -21,4 +22,13 @@ export async function login(email, password) {
     });
 
   return res;
+}
+
+export async function me() {
+  const api = axiosFactory();
+  try {
+    return (await api.get(`${VITE_PUBLIC_API_URL}/users/me`)).data;
+  } catch (error) {
+    return { error };
+  }
 }

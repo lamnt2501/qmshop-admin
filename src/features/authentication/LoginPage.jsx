@@ -7,25 +7,29 @@ import {
   useNavigation,
 } from "react-router-dom";
 import { useEffect } from "react";
-import { login } from "../../apis/authApi";
+import { login, me } from "../../apis/authApi";
 import Loader from "../../ui/Loader";
 
 function LoginPage() {
-  const { dispatch, setToken, token } = useAuthContext();
+  const { dispatch, setToken, token, setInformation } = useAuthContext();
   const { state } = useNavigation();
   const navigate = useNavigate();
   const data = useActionData();
   const isLoading = state === "loading" || state === "submitting";
 
   useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
+    (async () => {
+      if (token) {
+        navigate("/dashboard");
+      }
 
-    if (data?.token) {
-      dispatch(setToken(data.token));
-      navigate("/");
-    }
+      if (data?.token) {
+        dispatch(setToken(data.token));
+        const inform = await me();
+        dispatch(setInformation(inform));
+        navigate("/dashboard");
+      }
+    })();
   }, [data, token]);
 
   return (
