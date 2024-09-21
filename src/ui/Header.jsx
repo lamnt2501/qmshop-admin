@@ -40,9 +40,7 @@ function Header() {
           </Avatar>
           <div>
             <p className="font-medium">{inform?.name}</p>
-            <p className="text-sm">
-              {inform.role?.[0] + inform.role?.slice(1).toLowerCase()}
-            </p>
+            <p className="text-sm">{inform.role}</p>
           </div>
         </div>
         <Popover

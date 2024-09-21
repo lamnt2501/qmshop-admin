@@ -2,13 +2,14 @@ import { Link, useLoaderData } from "react-router-dom";
 import { fetchOrder, updateOrderStatus } from "../../apis/orderApi";
 import { DataGrid } from "@mui/x-data-grid";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
-import { Avatar, Box, Chip, Divider, Stepper } from "@mui/material";
-import PropTypes from "prop-types";
+import { Avatar, Box, Divider, Stepper } from "@mui/material";
 import { formatNumber } from "../../utils/utils";
 import UpdateStatusForm from "./UpdateStatusForm";
 import OrderStatusTrackingStep from "./OrderStatusTrackingstep";
 import { fetchCustomerByEmail } from "../../apis/customerApi";
 import useTitle from "../../hooks/useTitle";
+import UpdatePaymentStatusForm from "./UpdatePaymentStatusForm";
+import { updatePaymentStatus } from "../../apis/paymentApi";
 const buildRows = (items) =>
   items?.map((item) => {
     return {
@@ -325,11 +326,10 @@ function OrderDetails() {
                 <span className="font-medium">Amount :</span>
                 <span>{formatNumber(order.total, "vn")} VND</span>
               </p>
-              <div className="space-x-4">
+              <div>
                 <span className="font-medium">Payment Status :</span>
-                <span>
-                  <PaymentStatus value={order.paymentStatus} />
-                </span>
+                {/* <PaymentStatus value={order.paymentStatus} /> */}
+                <UpdatePaymentStatusForm />
               </div>
             </div>
           </div>
@@ -338,35 +338,6 @@ function OrderDetails() {
     </div>
   );
 }
-
-function PaymentStatus({ value }) {
-  const p = (value === "UNPAID" && {
-    color: "warning",
-    icon: <i className="fa-solid fa-sack-xmark"></i>,
-  }) ||
-    (value === "PROCESSING" && {
-      color: "info",
-      icon: <i className="fa-regular fa-clock"></i>,
-    }) ||
-    (value === "PAID" && {
-      color: "success",
-      icon: <i className="fa-solid fa-money-bill"></i>,
-    }) || { color: "error", icon: <i className="fa-solid fa-xmark"></i> };
-
-  return (
-    <Chip
-      label={`${value}`}
-      color={p.color}
-      className="w-[150px]"
-      icon={p.icon}
-      variant="outlined"
-    />
-  );
-}
-
-PaymentStatus.propTypes = {
-  value: PropTypes.string,
-};
 
 function getRowId(row) {
   return row.id;
@@ -383,9 +354,11 @@ export async function loader({ params: { id } }) {
 
 export async function action({ request, params: { id } }) {
   const data = Object.fromEntries(await request.formData());
-
   if (data.type === "status") {
     await updateOrderStatus(id, data.status, data.message);
+  }
+  if (data.type === "Payment Status") {
+    await updatePaymentStatus(id, data.status);
   }
   return null;
 }

@@ -14,10 +14,13 @@ async function getDashBoardData() {
     const topCustomer = (await api.get(`/orders/top-customer`)).data;
 
     const revenue = (
-      await api.post(`/payments/revenue`, {
-        type: "year",
-        year: new Date().getFullYear(),
-      })
+      await api.get(
+        `/payments/revenue?type=year&year=${new Date().getFullYear()}`,
+        // {
+        //   type: "year",
+        //   year: new Date().getFullYear(),
+        // },
+      )
     ).data;
 
     return {
