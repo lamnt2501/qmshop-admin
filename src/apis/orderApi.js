@@ -41,3 +41,14 @@ export async function fetchOrderByCustomerId(id) {
     return { error };
   }
 }
+
+export async function countOrderByStatus(status) {
+  const api = axiosFactory();
+
+  try {
+    const orderSummary = (await api.get(`/orders/status/${status}`)).data;
+    return orderSummary;
+  } catch (error) {
+    return { error };
+  }
+}

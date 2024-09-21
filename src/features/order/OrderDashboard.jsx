@@ -4,7 +4,7 @@ import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
 import { useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
-import { fetchOrders } from "../../apis/orderApi";
+import { countOrderByStatus, fetchOrders } from "../../apis/orderApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { fetchOrderSummary } from "../../apis/dashboardApi";
 import useTitle from "../../hooks/useTitle";
@@ -107,7 +107,15 @@ const buildRows = (data) =>
 
 function OrderDashboard() {
   const apiRef = useGridApiRef();
-  const { orders, orderSummary } = useLoaderData();
+  const {
+    orders,
+    orderSummary,
+    waitingCount,
+    approvedCount,
+    shippingCount,
+    succeededCount,
+    cancelCount,
+  } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [paginationModel, setPaginationModel] = useState({
@@ -122,10 +130,99 @@ function OrderDashboard() {
   }, []);
 
   useTitle("Order Dashboard");
+  const rowCount = (() => {
+    switch (searchParams.get("status")) {
+      case "WAITING":
+        return waitingCount;
+      case "APPROVED":
+        return approvedCount;
+      case "SHIPPING":
+        return shippingCount;
+      case "SUCCEEDED":
+        return succeededCount;
+      case "CANCEL":
+        return cancelCount;
+      default:
+        return orderSummary.totalOrder;
+    }
+  })();
 
   return (
     <div className="space-y-4">
-      <div className=""></div>
+      <div className="rounded-md">
+        <button
+          className="min-w-[100px] space-x-1 rounded-l-md border border-l-gray-100 bg-white px-3 py-2 font-medium hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.delete("status", s.get("status"));
+              return s;
+            });
+          }}
+        >
+          <span>All</span>
+          <span>({orderSummary.totalOrder})</span>
+        </button>
+        <button
+          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-yellow-600 hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.set("status", "WAITING");
+              return s;
+            });
+          }}
+        >
+          <span>Pending</span>
+          <span>({waitingCount})</span>
+        </button>
+        <button
+          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-blue-600 hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.set("status", "APPROVED");
+              return s;
+            });
+          }}
+        >
+          <span>Approved</span>
+          <span>({approvedCount})</span>
+        </button>
+        <button
+          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-purple-600 hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.set("status", "SHIPPING");
+              return s;
+            });
+          }}
+        >
+          <span>Shipping</span>
+          <span>({shippingCount})</span>
+        </button>
+        <button
+          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-green-600 hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.set("status", "SUCCEEDED");
+              return s;
+            });
+          }}
+        >
+          <span>Succeed</span>
+          <span>({succeededCount})</span>
+        </button>
+        <button
+          className="min-w-[100px] space-x-1 rounded-r-md bg-white px-3 py-2 font-medium text-red-600 hover:scale-[1.1]"
+          onClick={() => {
+            setSearchParams((s) => {
+              s.set("status", "CANCEL");
+              return s;
+            });
+          }}
+        >
+          <span>Cancel</span>
+          <span>({cancelCount})</span>
+        </button>
+      </div>
       <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
         <DataGrid
           apiRef={apiRef}
@@ -149,7 +246,7 @@ function OrderDashboard() {
               cursor: "pointer",
             },
           }}
-          rowCount={orderSummary.totalOrder}
+          rowCount={rowCount}
           onRowCountChange={(rc) => apiRef.current.setRowCount(rc)}
           pageSizeOptions={[10, 20, 30, 50, 100]}
           paginationModel={paginationModel}
@@ -229,10 +326,29 @@ function renderOrderStatusCell(value) {
 export async function loader({ request }) {
   const orders = await fetchOrders(request.url.split("?")[1]);
   const orderSummary = await fetchOrderSummary();
-
+  const waitingCount = (await countOrderByStatus("WAITING")).data;
+  const approvedCount = (await countOrderByStatus("APPROVED")).data;
+  const shippingCount = (await countOrderByStatus("SHIPPING")).data;
+  const succeededCount = (await countOrderByStatus("SUCCEEDED")).data;
+  const cancelCount = (await countOrderByStatus("CANCEL")).data;
+  console.log(
+    waitingCount,
+    approvedCount,
+    shippingCount,
+    succeededCount,
+    cancelCount,
+  );
   if (orders.error || orderSummary.error)
     throw new Response("Some thing went wrong!", { status: 400 });
-  return { orders, orderSummary };
+  return {
+    orders,
+    orderSummary,
+    waitingCount,
+    approvedCount,
+    shippingCount,
+    succeededCount,
+    cancelCount,
+  };
 }
 
 export default OrderDashboard;
