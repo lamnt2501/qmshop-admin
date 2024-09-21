@@ -70,9 +70,14 @@ function DiscountDasboard() {
   const navigate = useNavigate();
   console.log(discounts);
   return (
-    <div>
+    <div className="space-y-4">
       <div>
-        <button onClick={() => navigate("new")}>New Discount</button>
+        <button
+          className="rounded-md bg-main px-4 py-2 text-white"
+          onClick={() => navigate("new")}
+        >
+          New Discount
+        </button>
       </div>
       <Box
         width="100%"
