@@ -62,6 +62,7 @@ import NewDiscount, {
   action as newDiscountAction,
   loader as newDiscountLoader,
 } from "./features/discount/NewDiscount";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -172,6 +173,7 @@ function App() {
     <Provider store={store}>
       <AuthProvider>
         <RouterProvider router={router} />
+        <ToastContainer />
       </AuthProvider>
     </Provider>
   );

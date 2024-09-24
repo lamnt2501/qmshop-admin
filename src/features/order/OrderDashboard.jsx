@@ -8,6 +8,9 @@ import { countOrderByStatus, fetchOrders } from "../../apis/orderApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { fetchOrderSummary } from "../../apis/dashboardApi";
 import useTitle from "../../hooks/useTitle";
+import { useSubscription } from "react-stomp-hooks";
+import { toast } from "react-toastify";
+import { me } from "../../apis/authApi";
 
 const columns = [
   {
@@ -106,6 +109,13 @@ const buildRows = (data) =>
   });
 
 function OrderDashboard() {
+  const navigate = useNavigate();
+  useSubscription("/topic/notify/order", (message) => {
+    toast.info(message.body);
+    setTimeout(() => {
+      navigate(0);
+    }, 3000);
+  });
   const apiRef = useGridApiRef();
   const {
     orders,
@@ -117,7 +127,6 @@ function OrderDashboard() {
     cancelCount,
   } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 20,
@@ -130,6 +139,7 @@ function OrderDashboard() {
   }, []);
 
   useTitle("Order Dashboard");
+
   const rowCount = (() => {
     switch (searchParams.get("status")) {
       case "WAITING":

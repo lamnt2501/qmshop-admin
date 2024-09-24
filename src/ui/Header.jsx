@@ -3,8 +3,14 @@ import BreadcrumbsCustom from "./BreadcrumbsCustom.jsx";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext.jsx";
 import { useEffect, useState } from "react";
+import { useSubscription } from "react-stomp-hooks";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Header() {
+  useSubscription("/topic/notify/order", (message) => {
+    // toast.info(message.body);
+  });
   const { dispatch, logout } = useAuthContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [inform, setInform] = useState({});
