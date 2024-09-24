@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 import store from "./states/store";
 import AppLayout from "./ui/AppLayout";
@@ -63,8 +62,8 @@ import NewDiscount, {
   action as newDiscountAction,
   loader as newDiscountLoader,
 } from "./features/discount/NewDiscount";
-import { toast, ToastContainer } from "react-toastify";
-import { useSubscription } from "react-stomp-hooks";
+import { ToastContainer } from "react-toastify";
+import SubscribeComponent from "./ui/SubscribeComponent";
 
 const router = createBrowserRouter([
   {
@@ -171,17 +170,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const navigate = useNavigate();
-  useSubscription("/topic/notify/order", (message) => {
-    toast.info(message.body);
-    setTimeout(() => {
-      navigate(0);
-    }, 3000);
-  });
   return (
     <Provider store={store}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={router}>
+          <SubscribeComponent />
+        </RouterProvider>
         <ToastContainer />
       </AuthProvider>
     </Provider>
