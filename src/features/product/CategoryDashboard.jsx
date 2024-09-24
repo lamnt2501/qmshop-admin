@@ -113,7 +113,7 @@ export async function action({ request }) {
     "/categories",
     await request.formData(),
   );
-  console.log(res);
+  res;
   if (res.error) throw new Response(res.error.message);
   return null;
 }

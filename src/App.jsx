@@ -63,7 +63,6 @@ import NewDiscount, {
   loader as newDiscountLoader,
 } from "./features/discount/NewDiscount";
 import { ToastContainer } from "react-toastify";
-import SubscribeComponent from "./ui/SubscribeComponent";
 
 const router = createBrowserRouter([
   {
@@ -173,9 +172,7 @@ function App() {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <RouterProvider router={router}>
-          <SubscribeComponent />
-        </RouterProvider>
+        <RouterProvider router={router} />
         <ToastContainer />
       </AuthProvider>
     </Provider>

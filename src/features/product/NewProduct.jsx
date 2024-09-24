@@ -203,8 +203,7 @@ export async function loader() {
 export async function action({ request }) {
   const data = Object.fromEntries(await request.formData());
   data.categoryId = JSON.parse(data.categoryId);
-  const res = await createProduct(data);
-  console.log(res);
+  await createProduct(data);
   return null;
 }
 export default NewProduct;

@@ -106,7 +106,6 @@ function ProductDetails() {
 
     setEditModeOn((o) => !o);
   }
-  console.log(ratings);
   return (
     <div>
       <div className="space-y-4 lg:grid lg:grid-cols-[60%_40%] lg:space-x-4 lg:space-y-0">
@@ -351,7 +350,6 @@ export async function loader({ params: { id } }) {
   const brands = await fetchBrands();
   const categories = await fetchCategories();
 
-  // console.log(ratings);
   return { product, ratings, brands, categories };
 }
 

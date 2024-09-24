@@ -12,7 +12,6 @@ const errorMessage = (error) => {
 function Error() {
   const navigate = useNavigate();
   const error = useRouteError();
-  console.log(error);
   return (
     <div className="flex h-[100dvh] items-center justify-center space-x-4 p-14">
       <div className="flex-1">

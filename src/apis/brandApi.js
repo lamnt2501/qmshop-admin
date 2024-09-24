@@ -25,7 +25,6 @@ export async function updateBrand(brand) {
 
 export async function createBrand(data) {
   const api = axiosFactory();
-  console.log(Object.fromEntries(data));
   try {
     return (
       await api.post("/brands", data, {

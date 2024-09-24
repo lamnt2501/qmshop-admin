@@ -5,11 +5,13 @@ import Footer from "./Footer";
 import Loader from "./Loader";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SubscribeComponent from "./SubscribeComponent";
 function AppLayout() {
   const { state } = useNavigation();
   const isLoading = state === "loading";
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <SubscribeComponent />
       <div>
         {isLoading && <Loader />}
         <SideBar />

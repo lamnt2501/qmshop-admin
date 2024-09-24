@@ -68,7 +68,6 @@ function DiscountDasboard() {
   useTitle("Discount Dashboard");
   const { discounts } = useLoaderData();
   const navigate = useNavigate();
-  console.log(discounts);
   return (
     <div className="space-y-4">
       <div>

@@ -150,8 +150,8 @@ export async function action({ request }) {
   data.productIds = JSON.parse(data.productIds);
   data.startAt = new Date(data.startAt);
   data.endAt = new Date(data.endAt);
-  const res = await createDiscount(data);
-  console.log(res);
+  await createDiscount(data);
+
   return null;
 }
 export default NewDiscount;

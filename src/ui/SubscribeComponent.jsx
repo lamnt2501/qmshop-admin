@@ -10,6 +10,7 @@ function SubscribeComponent() {
       navigate(0);
     }, 3000);
   });
+
   return null;
 }
 

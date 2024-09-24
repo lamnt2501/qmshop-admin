@@ -332,13 +332,7 @@ export async function loader({ request }) {
   const shippingCount = (await countOrderByStatus("SHIPPING")).data;
   const succeededCount = (await countOrderByStatus("SUCCEEDED")).data;
   const cancelCount = (await countOrderByStatus("CANCEL")).data;
-  console.log(
-    waitingCount,
-    approvedCount,
-    shippingCount,
-    succeededCount,
-    cancelCount,
-  );
+
   if (orders.error || orderSummary.error)
     throw new Response("Some thing went wrong!", { status: 400 });
   return {
