@@ -4,13 +4,10 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext.jsx";
 import { useEffect, useState } from "react";
 import { useSubscription } from "react-stomp-hooks";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Header() {
-  useSubscription("/topic/notify/order", (message) => {
-    // toast.info(message.body);
-  });
+  useSubscription("/topic/notify/order", () => {});
   const { dispatch, logout } = useAuthContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [inform, setInform] = useState({});
@@ -35,18 +32,18 @@ function Header() {
       <div className="relative bg-gray-100 px-4 py-2 hover:cursor-pointer">
         <div className="flex items-center space-x-4" onClick={handleClick}>
           <Avatar
-            src={inform.avtUrl}
+            src={inform?.avtUrl}
             alt="Avatar image"
             sx={{
               width: 40,
               height: 40,
             }}
           >
-            {name.split(" ").at(-1)[0]}
+            {inform?.name?.split(" ").at(-1)[0]}
           </Avatar>
           <div>
             <p className="font-medium">{inform?.name}</p>
-            <p className="text-sm">{inform.role}</p>
+            <p className="text-sm">{inform?.role}</p>
           </div>
         </div>
         <Popover

@@ -1,10 +1,10 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 import {
   fetchCustomerById,
   fetchTopCustomerById,
 } from "../../apis/customerApi";
 import { DataGrid } from "@mui/x-data-grid";
-import { Avatar } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import { formatDate, formatNumber } from "../../utils/utils";
 import { fetchOrderByCustomerId } from "../../apis/orderApi";
 import OrderStatus from "../order/OrderStatus";
@@ -118,7 +118,16 @@ function CustomerDetails() {
           )}
         </div>
       </div>
-      <div className="rounded-md bg-white"></div>
+      <div className="h-fit rounded-md bg-white p-4">
+        <div className="grid h-[600px] grid-rows-[90%_10%] rounded-md border border-gray-50 p-4">
+          <div></div>
+          <div>
+            <Form className="flex items-center">
+              <TextField fullWidth placeholder="Type Message Here" />
+            </Form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
