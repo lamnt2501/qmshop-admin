@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const labelMap = {
   WAITING: "Order Placed",
   APPROVED: "Processed",
+  PACKING: "Packing",
   SHIPPING: "Shipping",
   SUCCEEDED: "Delivered",
   CANCEL: "Cancel",
@@ -26,6 +27,9 @@ export default function OrderStatusTrackingStep({ tracking, completed }) {
           )) ||
             (tracking.status === "APPROVED" && (
               <i className="fa-solid fa-check-double"></i>
+            )) ||
+            (tracking.status === "PACKING" && (
+              <i className="fa-solid fa-boxes-packing"></i>
             )) ||
             (tracking.status === "SHIPPING" && (
               <i className="fa-solid fa-truck-fast"></i>

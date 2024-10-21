@@ -9,6 +9,10 @@ export default function OrderStatus({ status }) {
       color: "info",
       icon: <i className="fa-solid fa-check-double"></i>,
     }) ||
+    (status === "PACKING" && {
+      color: "primary",
+      icon: <i className="fa-solid fa-boxes-packing"></i>,
+    }) ||
     (status === "SHIPPING" && {
       color: "secondary",
       icon: <i className="fa-solid fa-truck-fast"></i>,

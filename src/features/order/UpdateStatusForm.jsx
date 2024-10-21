@@ -2,7 +2,14 @@ import { MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import { Form, useRouteLoaderData } from "react-router-dom";
 import OrderStatus from "./OrderStatus";
-const valueOptions = ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"];
+const valueOptions = [
+  "WAITING",
+  "APPROVED",
+  "PACKING",
+  "SHIPPING",
+  "SUCCEEDED",
+  "CANCEL",
+];
 
 export default function UpdateStatusForm() {
   const {

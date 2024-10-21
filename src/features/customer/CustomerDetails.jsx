@@ -54,7 +54,7 @@ function CustomerDetails() {
   const navigate = useNavigate();
   useTitle("Customer Details - " + customer.name);
   return (
-    <div className="grid grid-cols-2 space-x-4">
+    <div className="space-y-4 lg:grid lg:grid-cols-2 lg:space-x-4 lg:space-y-0">
       <div className="space-y-4">
         <div className="grid grid-cols-2 space-x-4">
           <div className="space-y-4 rounded-md bg-white p-4">
@@ -120,7 +120,11 @@ function CustomerDetails() {
       </div>
       <div className="h-fit rounded-md bg-white p-4">
         <div className="grid h-[600px] grid-rows-[90%_10%] rounded-md border border-gray-50 p-4">
-          <div></div>
+          <div>
+            <p className="text-center text-gray-500">
+              Start talking to each other
+            </p>
+          </div>
           <div>
             <Form className="flex items-center">
               <TextField fullWidth placeholder="Type Message Here" />

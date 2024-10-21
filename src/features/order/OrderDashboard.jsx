@@ -2,12 +2,13 @@ import { Box, Chip } from "@mui/material";
 import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import { formatDate } from "../../utils/utils";
 import { formatNumber } from "chart.js/helpers";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { countOrderByStatus, fetchOrders } from "../../apis/orderApi";
 import { BASE_COL_DEF } from "../../configs/dataGridConfig";
 import { fetchOrderSummary } from "../../apis/dashboardApi";
 import useTitle from "../../hooks/useTitle";
+import OrderStatus from "./OrderStatus";
 
 const columns = [
   {
@@ -41,10 +42,17 @@ const columns = [
     field: "status",
     type: "singleSelect",
     resizable: false,
-    valueOptions: ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"],
+    valueOptions: [
+      "WAITING",
+      "APPROVED",
+      "PACKING",
+      "SHIPPING",
+      "SUCCEEDED",
+      "CANCEL",
+    ],
     headerName: "Order Status",
     renderCell: function ({ value }) {
-      return renderOrderStatusCell(value);
+      return <OrderStatus status={value} />;
     },
     // renderEditCell: (params) => {
     //   return RenderOrderStatusEditCell(params);
@@ -108,6 +116,7 @@ const buildRows = (data) =>
 function OrderDashboard() {
   const navigate = useNavigate();
   const apiRef = useGridApiRef();
+  const role = JSON.parse(localStorage.getItem("inform")).role;
   const {
     orders,
     orderSummary,
@@ -115,6 +124,7 @@ function OrderDashboard() {
     approvedCount,
     shippingCount,
     succeededCount,
+    packingCount,
     cancelCount,
   } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -125,7 +135,7 @@ function OrderDashboard() {
 
   const initialDataGridState = useMemo(() => {
     return {
-      sorting: { sortModel: [{ field: "date", sort: "desc" }] },
+      // sorting: { sortModel: [{ field: "date", sort: "desc" }] },
     };
   }, []);
 
@@ -147,11 +157,25 @@ function OrderDashboard() {
         return orderSummary.totalOrder;
     }
   })();
-
+  useEffect(() => {
+    setSearchParams((s) => {
+      s.set(
+        "status",
+        role === "ORDER_PROCESSOR"
+          ? "WAITING"
+          : role === "ORDER_PACKING"
+            ? "APPROVED"
+            : role === "ORDER_SHIPPING"
+              ? "PACKING"
+              : "",
+      );
+      return s;
+    });
+  }, []);
   return (
     <div className="space-y-4">
       <div className="rounded-md">
-        <button
+        {/* <button
           className="min-w-[100px] space-x-1 rounded-l-md border border-l-gray-100 bg-white px-3 py-2 font-medium hover:scale-[1.1]"
           onClick={() => {
             setSearchParams((s) => {
@@ -162,44 +186,64 @@ function OrderDashboard() {
         >
           <span>All</span>
           <span>({orderSummary.totalOrder})</span>
-        </button>
-        <button
-          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-yellow-600 hover:scale-[1.1]"
-          onClick={() => {
-            setSearchParams((s) => {
-              s.set("status", "WAITING");
-              return s;
-            });
-          }}
-        >
-          <span>Pending</span>
-          <span>({waitingCount})</span>
-        </button>
-        <button
-          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-blue-600 hover:scale-[1.1]"
-          onClick={() => {
-            setSearchParams((s) => {
-              s.set("status", "APPROVED");
-              return s;
-            });
-          }}
-        >
-          <span>Approved</span>
-          <span>({approvedCount})</span>
-        </button>
-        <button
-          className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-purple-600 hover:scale-[1.1]"
-          onClick={() => {
-            setSearchParams((s) => {
-              s.set("status", "SHIPPING");
-              return s;
-            });
-          }}
-        >
-          <span>Shipping</span>
-          <span>({shippingCount})</span>
-        </button>
-        <button
+        </button> */}
+        {role == "ORDER_PROCESSOR" && (
+          <button
+            className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-yellow-600 hover:scale-[1.1]"
+            onClick={() => {
+              setSearchParams((s) => {
+                s.set("status", "WAITING");
+                return s;
+              });
+            }}
+          >
+            <span>Pending</span>
+            <span>({waitingCount})</span>
+          </button>
+        )}
+        {role == "ORDER_PACKING" && (
+          <button
+            className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-blue-600 hover:scale-[1.1]"
+            onClick={() => {
+              setSearchParams((s) => {
+                s.set("status", "APPROVED");
+                return s;
+              });
+            }}
+          >
+            <span>Approved</span>
+            <span>({approvedCount})</span>
+          </button>
+        )}
+        {role === "ORDER_SHIPPING" && (
+          <>
+            <button
+              className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-cyan-600 hover:scale-[1.1]"
+              onClick={() => {
+                setSearchParams((s) => {
+                  s.set("status", "PACKING");
+                  return s;
+                });
+              }}
+            >
+              <span>Packed</span>
+              <span>({packingCount})</span>
+            </button>
+            <button
+              className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-purple-600 hover:scale-[1.1]"
+              onClick={() => {
+                setSearchParams((s) => {
+                  s.set("status", "SHIPPING");
+                  return s;
+                });
+              }}
+            >
+              <span>Shipping</span>
+              <span>({shippingCount})</span>
+            </button>
+          </>
+        )}
+        {/* <button
           className="min-w-[100px] space-x-1 border border-l-gray-100 bg-white px-3 py-2 font-medium text-green-600 hover:scale-[1.1]"
           onClick={() => {
             setSearchParams((s) => {
@@ -210,7 +254,7 @@ function OrderDashboard() {
         >
           <span>Succeed</span>
           <span>({succeededCount})</span>
-        </button>
+        </button> */}
         <button
           className="min-w-[100px] space-x-1 rounded-r-md bg-white px-3 py-2 font-medium text-red-600 hover:scale-[1.1]"
           onClick={() => {
@@ -266,37 +310,37 @@ function OrderDashboard() {
   );
 }
 
-function renderOrderStatusCell(value) {
-  const props = (value === "WAITING" && {
-    color: "warning",
-    icon: <i className="fa-regular fa-clock"></i>,
-  }) ||
-    (value === "APPROVED" && {
-      color: "info",
-      icon: <i className="fa-solid fa-check-double"></i>,
-    }) ||
-    (value === "SHIPPING" && {
-      color: "secondary",
-      icon: <i className="fa-solid fa-truck-fast"></i>,
-    }) ||
-    (value === "SUCCEEDED" && {
-      color: "success",
-      icon: <i className="fa-regular fa-circle-check"></i>,
-    }) || {
-      color: "error",
-      icon: <i className="fa-solid fa-ban"></i>,
-    };
+// function renderOrderStatusCell(value) {
+//   const props = (value === "WAITING" && {
+//     color: "warning",
+//     icon: <i className="fa-regular fa-clock"></i>,
+//   }) ||
+//     (value === "APPROVED" && {
+//       color: "info",
+//       icon: <i className="fa-solid fa-check-double"></i>,
+//     }) ||
+//     (value === "SHIPPING" && {
+//       color: "secondary",
+//       icon: <i className="fa-solid fa-truck-fast"></i>,
+//     }) ||
+//     (value === "SUCCEEDED" && {
+//       color: "success",
+//       icon: <i className="fa-regular fa-circle-check"></i>,
+//     }) || {
+//       color: "error",
+//       icon: <i className="fa-solid fa-ban"></i>,
+//     };
 
-  return (
-    <Chip
-      label={`${value}`}
-      color={props.color}
-      className="w-[130px] space-x-1"
-      variant="outlined"
-      icon={props.icon}
-    />
-  );
-}
+//   return (
+//     <Chip
+//       label={`${value}`}
+//       color={props.color}
+//       className="w-[130px] space-x-1"
+//       variant="outlined"
+//       icon={props.icon}
+//     />
+//   );
+// }
 
 // function RenderOrderStatusEditCell({
 //   id,
@@ -329,6 +373,7 @@ export async function loader({ request }) {
   const orderSummary = await fetchOrderSummary();
   const waitingCount = (await countOrderByStatus("WAITING")).data;
   const approvedCount = (await countOrderByStatus("APPROVED")).data;
+  const packingCount = (await countOrderByStatus("PACKING")).data;
   const shippingCount = (await countOrderByStatus("SHIPPING")).data;
   const succeededCount = (await countOrderByStatus("SUCCEEDED")).data;
   const cancelCount = (await countOrderByStatus("CANCEL")).data;
@@ -340,6 +385,7 @@ export async function loader({ request }) {
     orderSummary,
     waitingCount,
     approvedCount,
+    packingCount,
     shippingCount,
     succeededCount,
     cancelCount,

@@ -92,7 +92,14 @@ const columns = [
   },
 ];
 
-const valueOptions = ["WAITING", "APPROVED", "SHIPPING", "SUCCEEDED", "CANCEL"];
+const valueOptions = [
+  "WAITING",
+  "APPROVED",
+  "PACKING",
+  "SHIPPING",
+  "SUCCEEDED",
+  "CANCEL",
+];
 
 function OrderDetails() {
   const { order, customer } = useLoaderData();
@@ -205,9 +212,9 @@ function OrderDetails() {
                   tracking={t}
                 />
               ))}
-              {valueOptions.indexOf(order.status) < 3 &&
+              {valueOptions.indexOf(order.status) < 4 &&
                 valueOptions
-                  .slice(valueOptions.indexOf(order.status) + 1, 4)
+                  .slice(valueOptions.indexOf(order.status) + 1, 5)
                   .map((s) => {
                     return (
                       <OrderStatusTrackingStep

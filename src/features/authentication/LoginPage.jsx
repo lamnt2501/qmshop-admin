@@ -27,7 +27,16 @@ function LoginPage() {
         dispatch(setToken(data.token));
         const inform = await me();
         dispatch(setInformation(inform));
-        navigate("/dashboard");
+        switch (inform.role) {
+          case "ORDER_PROCESSOR":
+          case "ACCOUNTANT":
+          case "ORDER_PACKING":
+          case "ORDER_SHIPPING":
+            navigate("/orders");
+            break;
+          default:
+            navigate("/dashboard");
+        }
       }
     })();
   }, [data, token]);
