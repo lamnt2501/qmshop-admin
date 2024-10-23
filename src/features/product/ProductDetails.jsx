@@ -74,6 +74,7 @@ function ProductDetails() {
   const editorRef = useRef(null);
   const { product, ratings, brands, categories } = useLoaderData();
   const [name, setName] = useState(product.name);
+  const [rateVal, setRateVal] = useState(5);
   const [active, setActive] = useState(product.active);
   const [categoryId, setCategoryId] = useState(
     categories
@@ -301,9 +302,22 @@ function ProductDetails() {
         </div>
 
         <div className="top-62 sticky rounded-md">
-          <h1 className="bg-white p-4 text-lg font-medium">Ratings</h1>
-          <div className="max-h-[1000px] space-y-4 overflow-y-scroll bg-white p-4">
-            {ratings.map((r) => (
+          <h1 className="rounded-tl-md rounded-tr-md bg-white p-4 text-lg font-medium">
+            Ratings
+          </h1>
+          <div className="max-h-[1000px] space-y-4 overflow-y-scroll rounded-bl-md rounded-br-md bg-white p-4">
+            <div className="flex justify-between">
+              {[0, 0, 0, 0, 0].map((v, i) => (
+                <button
+                  className="bg-amber-100 px-3 py-2"
+                  key={i}
+                  onClick={() => setRateVal(i + 1)}
+                >
+                  {i + 1} Star ({ratings[`_${i + 1}`].length})
+                </button>
+              ))}
+            </div>
+            {ratings[`_${rateVal}`].map((r) => (
               <>
                 <RatingComment key={r.id} rating={r} />
                 <hr />
@@ -349,7 +363,7 @@ export async function loader({ params: { id } }) {
   const ratings = await fetchRatingsByProductId(id);
   const brands = await fetchBrands();
   const categories = await fetchCategories();
-
+  console.log(ratings);
   return { product, ratings, brands, categories };
 }
 

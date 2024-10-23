@@ -158,19 +158,20 @@ function OrderDashboard() {
     }
   })();
   useEffect(() => {
-    setSearchParams((s) => {
-      s.set(
-        "status",
-        role === "ORDER_PROCESSOR"
-          ? "WAITING"
-          : role === "ORDER_PACKING"
-            ? "APPROVED"
-            : role === "ORDER_SHIPPING"
-              ? "PACKING"
-              : "",
-      );
-      return s;
-    });
+    if (role.includes("ORDER"))
+      setSearchParams((s) => {
+        s.set(
+          "status",
+          role === "ORDER_PROCESSOR"
+            ? "WAITING"
+            : role === "ORDER_PACKING"
+              ? "APPROVED"
+              : role === "ORDER_SHIPPING"
+                ? "PACKING"
+                : "",
+        );
+        return s;
+      });
   }, []);
   return (
     <div className="space-y-4">
