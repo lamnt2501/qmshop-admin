@@ -3,7 +3,7 @@ import { Form, useLoaderData } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const paymentStatus = ["UNPAID", "PAID", "CANCEL"];
+const paymentStatus = ["UNPAID", "PAID", "CANCEL", "PROCESSING"];
 
 function UpdatePaymentStatusForm() {
   const { order } = useLoaderData("orderDetails");
