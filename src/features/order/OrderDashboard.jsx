@@ -173,6 +173,7 @@ function OrderDashboard() {
         return s;
       });
   }, []);
+
   return (
     <div className="space-y-4">
       <div className="rounded-md">
@@ -272,7 +273,11 @@ function OrderDashboard() {
       <Box sx={{ height: "500px", width: "100%", backgroundColor: "white" }}>
         <DataGrid
           apiRef={apiRef}
-          rows={buildRows(orders)}
+          rows={buildRows(
+            role != "ACCOUNTANT"
+              ? orders
+              : orders.filter((o) => o.paymentStatus !== "PAID"),
+          )}
           columns={columns}
           disableColumnFilter
           density="comfortable"
