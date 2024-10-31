@@ -14,7 +14,7 @@ function UpdatePaymentStatusForm() {
       className={`${open ? "mx-auto mt-4 flex max-w-[50%] flex-col justify-center space-y-4" : "ml-4 inline-block"}`}
       method="post"
     >
-      {order.paymentStatus !== "UNPAID" ? (
+      {["PAID", "CANCEL"].includes(order.paymentStatus) ? (
         <PaymentStatus value={order.paymentStatus} />
       ) : (
         <Select
